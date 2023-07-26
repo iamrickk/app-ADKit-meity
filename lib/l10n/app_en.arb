@@ -207,5 +207,13 @@
     "adviceSafe": "You are safe. Keep up the good work.",
     "@adviceSafe": {
         "description": "advice"
+    },
+    "showHospitals": "Show nearby Doctors",
+    "@showHospitals": {
+        "description": "Message to show nearby Hospitals"
+    },
+    "nearbyHospitals": "Nearby Hospitals",
+    "@nearbyHospitals": {
+        "description": "Screen Title"
     }
 }

@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:screen/screen.dart';
 import 'package:thefirstone/resources/language_model.dart';
+import 'package:thefirstone/ui/options_page.dart';
 import 'package:thefirstone/ui/profiles.dart';
+import 'package:thefirstone/ui/splash.dart';
 import 'l10n/l10n.dart';
 import 'ui/login.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,7 +23,7 @@ void main() async {
   ));
 }
 
-final _auth = FirebaseAuth.instance;
+// final _auth = FirebaseAuth.instance;
 
 class MyApp extends StatefulWidget {
   @override
@@ -49,18 +51,18 @@ class _MyAppState extends State<MyApp> {
     print(info);
   }
 
-  _getScreen() {
-    // print(_auth.currentUser!.uid);
-    if (_auth != null) {
-      if (_auth.currentUser != null) {
-        // if (!_auth.currentUser!.uid.isEmpty)
-        // return DoctorsPage();
-        return Profiles();
-      }
-    }
-    // return Profiles();
-    return LoginPage();
-  }
+  // _getScreen() {
+  //   // print(_auth.currentUser!.uid);
+  //   if (_auth != null) {
+  //     if (_auth.currentUser != null) {
+  //       // if (!_auth.currentUser!.uid.isEmpty)
+  //       // return DoctorsPage();
+  //       return Profiles();
+  //     }
+  //   }
+  //   // return Profiles();
+  //   return LoginPage();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,7 @@ class _MyAppState extends State<MyApp> {
         accentColor: Color(0xFFFCF0E7),
       ),
       debugShowCheckedModeBanner: false,
-      home: _getScreen(),
+      home: splash_screen(),
       locale: Locale(Provider.of<LanguageModel>(context).currentLocale),
       supportedLocales: L10n.all,
       localizationsDelegates: const [

@@ -19,6 +19,8 @@ import 'package:thefirstone/ui/trend_graph.dart';
 import 'package:thefirstone/ui/profiles.dart';
 import 'firestore_form.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'nearby_hospital_page.dart';
 // import '../utils/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -583,271 +585,335 @@ class _HomePageState extends State<HomePage> {
     width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          color: Colors.white,
-          child: Stack(
-            children: [
-              Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        child: Text(
-                            "${AppLocalizations.of(context)!.hi(userData!['first_name'])},\n${AppLocalizations.of(context)!.welcome}",
-                            style: TextStyle(
-                              fontSize: textSize,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        alignment: Alignment.topLeft,
-                        padding: EdgeInsets.symmetric(vertical: 25),
-                      ),
-                      Container(
-                        // margin: EdgeInsets.all(20),
-                        child: Card(
-                          elevation: 10,
-                          color: Theme.of(context).accentColor,
-                          child: IconButton(
-                            onPressed: () async {
-                              await FirebaseAuth.instance.signOut();
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const LanguageSelect()));
-                              setState(() {
-                                firstButtonText = null;
-                                secondButtonText = null;
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.language,
-                              color: Color(0xFFBF828A), //Color(0xFFBF828A),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        // margin: EdgeInsets.all(20),
-                        child: Card(
-                          elevation: 10,
-                          color: Theme.of(context).accentColor,
-                          child: IconButton(
-                            onPressed: () async {
-                              await FirebaseAuth.instance.signOut();
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginPage()),
-                                  (route) => false);
-                            },
-                            icon: Icon(
-                              Icons.logout,
-                              color: Color(0xFFBF828A), //Color(0xFFBF828A),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: height * .08,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              _selectAndUploadVideo();
-                              // _showGauge(11.2, 5);
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(builder: (context) => TrendGraph()),
-                              // );
-                            },
-                            child: Card(
-                              elevation: 10,
-                              child: Container(
-                                color: Theme.of(context).accentColor,
-                                padding: EdgeInsets.all(20),
-                                child: Icon(
-                                  Icons.video_library,
-                                  color: Color(0xFFBF828A),
-                                  size: 70,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(firstButtonText ??
-                              AppLocalizations.of(context)!.selectVideo),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              _recordVideo();
-                            },
-                            child: Card(
-                              elevation: 10,
-                              child: Container(
-                                color: Theme.of(context).accentColor,
-                                padding: EdgeInsets.all(20),
-                                child: Icon(
-                                  Icons.videocam,
-                                  color: Color(0xFFBF828A),
-                                  size: 70,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(secondButtonText ??
-                              AppLocalizations.of(context)!.recordVideo),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => TrendGraph()),
-                              );
-                            },
-                            child: Card(
-                              elevation: 10,
-                              child: Container(
-                                color: Theme.of(context).accentColor,
-                                padding: EdgeInsets.all(20),
-                                child: Icon(
-                                  Icons.auto_graph,
-                                  color: Color(0xFFBF828A),
-                                  size: 70,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(AppLocalizations.of(context)!.showTrend),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => DoctorsPage()),
-                              );
-                            },
-                            child: Card(
-                              elevation: 10,
-                              child: Container(
-                                color: Theme.of(context).accentColor,
-                                padding: EdgeInsets.all(20),
-                                child: Icon(
-                                  Icons.medical_services,
-                                  color: Color(0xFFBF828A),
-                                  size: 70,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(AppLocalizations.of(context)!.showDoctors),
-                        ],
-                      ),
-                    ],
-                  ),
-                  // SizedBox(
-                  //   height: height * 0.06,
-                  // ),
+        body: SingleChildScrollView(
+          child: Container(
 
-                  SizedBox(
-                    height: height * .05,
-                  ),
-                  _uploadTask != null
-                      ? _uploadStatus(_uploadTask!)
-                      : Offstage(),
-                  // Text(hValue)
-                ],
-              ),
-              // GestureDetector(
-              //   onTap: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(builder: (context) => FirestoreForm()),
-              //     );
-              //   },
-              //   child: Container(
-              //     margin: EdgeInsets.only(top: height * .80, left: width - 250),
-              //     height: 60,
-              //     width: 240,
-              //     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-              //     child: Card(
-              //       elevation: 10,
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(25.0),
-              //       ),
-              //       color: Color(0xFFBF828A),
-              //       child: Container(
-              //         child: new Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //           children: <Widget>[
-              //             new Padding(
-              //               padding: const EdgeInsets.only(left: 16.0),
-              //               child: Text(
-              //                 "CHATBOT",
-              //                 style: TextStyle(
-              //                     color: Colors.white,
-              //                     fontWeight: FontWeight.w600),
-              //               ),
-              //             ),
-              //             TextButton(
-              //               shape: new RoundedRectangleBorder(
-              //                   borderRadius: new BorderRadius.circular(20.0)),
-              //               splashColor: Colors.white,
-              //               color: Colors.white,
-              //               child: Icon(
-              //                 Icons.message,
-              //                 color: Color(0xFFBF828A),
-              //               ),
-              //               onPressed: () {
-              //                 Navigator.push(
-              //                   context,
-              //                   MaterialPageRoute(
-              //                       builder: (context) => FirestoreForm()),
-              //                 );
-              //               },
-              //             ),
-              //             SizedBox(width: 1)
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
+            color: Colors.white,
+            child: Stack(
+              children: [
+                Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          child: Text(
+                              "${AppLocalizations.of(context)!.hi(userData!['first_name'])},\n${AppLocalizations.of(context)!.welcome}",
+                              style: TextStyle(
+                                fontSize: textSize,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.symmetric(vertical: 25),
+                        ),
+                        Container(
+                          // margin: EdgeInsets.all(20),
+                          child: Card(
+                            elevation: 10,
+                            color: Theme.of(context).accentColor,
+                            child: IconButton(
+                              onPressed: () async {
+                                await FirebaseAuth.instance.signOut();
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LanguageSelect()));
+                                setState(() {
+                                  firstButtonText = null;
+                                  secondButtonText = null;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.language,
+                                color: Color(0xFFBF828A), //Color(0xFFBF828A),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          // margin: EdgeInsets.all(20),
+                          child: Card(
+                            elevation: 10,
+                            color: Theme.of(context).accentColor,
+                            child: IconButton(
+                              onPressed: () async {
+                                await FirebaseAuth.instance.signOut();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()),
+                                    (route) => false);
+                              },
+                              icon: Icon(
+                                Icons.logout,
+                                color: Color(0xFFBF828A), //Color(0xFFBF828A),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: height * .06,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            width: width * 0.4,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    _selectAndUploadVideo();
+                                    // _showGauge(11.2, 5);
+                                    // Navigator.of(context).push(
+                                    //   MaterialPageRoute(builder: (context) => TrendGraph()),
+                                    // );
+                                  },
+                                  child: Card(
+                                    elevation: 10,
+                                    child: Container(
+                                      color: Theme.of(context).accentColor,
+                                      padding: EdgeInsets.all(20),
+                                      child: Icon(
+                                        Icons.video_library,
+                                        color: Color(0xFFBF828A),
+                                        size: 70,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(firstButtonText ??
+                                    AppLocalizations.of(context)!.selectVideo,
+                                    textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: width * 0.4,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    _recordVideo();
+                                  },
+                                  child: Card(
+                                    elevation: 10,
+                                    child: Container(
+                                      color: Theme.of(context).accentColor,
+                                      padding: EdgeInsets.all(20),
+                                      child: Icon(
+                                        Icons.videocam,
+                                        color: Color(0xFFBF828A),
+                                        size: 70,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(secondButtonText ??
+                                    AppLocalizations.of(context)!.recordVideo,
+                                    textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: height * .02,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            width: width*.4,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) => TrendGraph()),
+                                    );
+                                  },
+                                  child: Card(
+                                    elevation: 10,
+                                    child: Container(
+                                      color: Theme.of(context).accentColor,
+                                      padding: EdgeInsets.all(20),
+                                      child: Icon(
+                                        Icons.auto_graph,
+                                        color: Color(0xFFBF828A),
+                                        size: 70,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(AppLocalizations.of(context)!.showTrend,
+                                textAlign: TextAlign.center,),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: width*.4,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) => DoctorsPage()),
+                                    );
+                                  },
+                                  child: Card(
+                                    elevation: 10,
+                                    child: Container(
+                                      color: Theme.of(context).accentColor,
+                                      padding: EdgeInsets.all(20),
+                                      child: Icon(
+                                        Icons.medical_services,
+                                        color: Color(0xFFBF828A),
+                                        size: 70,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(AppLocalizations.of(context)!.showDoctors,
+                                textAlign: TextAlign.center,),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // SizedBox(
+                    //   height: height * 0.06,
+                    // ),
+
+                    SizedBox(
+                      height: height * .02,
+                    ),
+                    _uploadTask != null
+                        ? _uploadStatus(_uploadTask!)
+                        : Offstage(),
+                    // Text(hValue)
+
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => nearby_hospital()),
+                                );
+                              },
+                              child: Card(
+                                elevation: 10,
+                                child: Container(
+                                  color: Theme.of(context).accentColor,
+                                  padding: EdgeInsets.all(20),
+                                  child: Icon(
+                                    Icons.local_hospital,
+                                    color: Color(0xFFBF828A),
+                                    size: 70,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(AppLocalizations.of(context)!.showHospitals),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => FirestoreForm()),
+                //     );
+                //   },
+                //   child: Container(
+                //     margin: EdgeInsets.only(top: height * .80, left: width - 250),
+                //     height: 60,
+                //     width: 240,
+                //     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                //     child: Card(
+                //       elevation: 10,
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(25.0),
+                //       ),
+                //       color: Color(0xFFBF828A),
+                //       child: Container(
+                //         child: new Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: <Widget>[
+                //             new Padding(
+                //               padding: const EdgeInsets.only(left: 16.0),
+                //               child: Text(
+                //                 "CHATBOT",
+                //                 style: TextStyle(
+                //                     color: Colors.white,
+                //                     fontWeight: FontWeight.w600),
+                //               ),
+                //             ),
+                //             TextButton(
+                //               shape: new RoundedRectangleBorder(
+                //                   borderRadius: new BorderRadius.circular(20.0)),
+                //               splashColor: Colors.white,
+                //               color: Colors.white,
+                //               child: Icon(
+                //                 Icons.message,
+                //                 color: Color(0xFFBF828A),
+                //               ),
+                //               onPressed: () {
+                //                 Navigator.push(
+                //                   context,
+                //                   MaterialPageRoute(
+                //                       builder: (context) => FirestoreForm()),
+                //                 );
+                //               },
+                //             ),
+                //             SizedBox(width: 1)
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),

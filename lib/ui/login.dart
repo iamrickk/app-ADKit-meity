@@ -6,7 +6,6 @@ import 'package:thefirstone/widgets/custom_clipper.dart';
 import '../utils/firebase_auth.dart';
 import 'otp.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
