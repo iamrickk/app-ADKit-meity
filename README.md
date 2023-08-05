@@ -1,6 +1,23 @@
 # thefirstone
+ADKit: 
+Smartphone Based Artificial Intelligence Enabled Portable Low-cost Anemia Detection Kit based on Observation of Nail and Palm Pallor
 
-A new Flutter project.
+# Under MEITY
+  Status : ongoing
+
+# Implemented Features such as:
+  - Nearby Doctors suggestion for emergency from google map.
+  - Nearby Hospitals Search 
+  - Integrated Google map in the app to show the Hospitals.
+  - Different Portals One for User and One for Doctor.
+  - Minor UI Changes
+  - Profile Page for Doctors portal.
+    
+
+# Future Updates:
+  - Pause and Resume options for uploading video.
+  - Search Page for Doctors to find the user
+    
 
 ## Getting Started
 
