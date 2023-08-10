@@ -119,7 +119,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     try {
       // uploading the image to the firebase storage
-      await storeFielToStorage("profilePic/_uid", profilePic).then((value) {
+      await storeFielToStorage("profilePic/$_uid", profilePic).then((value) {
         doctorModel.profilePic = value;
         doctorModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
         doctorModel.uid = _firebaseAuth.currentUser!.phoneNumber!;

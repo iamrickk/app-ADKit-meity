@@ -16,6 +16,11 @@ class DoctorsPage extends StatefulWidget {
 }
 
 class _DoctorsPageState extends State<DoctorsPage> {
+  Future<List<QueryDocumentSnapshot>> fetchDoctors() async {
+    QuerySnapshot snapshot =
+    await FirebaseFirestore.instance.collection("Doctors").get();
+    return snapshot.docs;
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -45,201 +50,161 @@ class _DoctorsPageState extends State<DoctorsPage> {
             //   fit: BoxFit.cover,
             // ),
             Expanded(
-              child: StreamBuilder(
-                stream: AuthProvider.doctorsList(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData) {
+              child: FutureBuilder<List<QueryDocumentSnapshot>>(
+                future: fetchDoctors(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                        child:  CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Text('No doctors available.');
+                  } else {
                     return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 2.5,
-                        ),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          child: Card(
-                            elevation: 5.0,
-                            margin: const EdgeInsets.all(5.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0)),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 10.0,
-                                ),
-                                Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                  ),
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        var doctorData = snapshot.data![index].data() as Map<String, dynamic>;
+                        return Card(
+                          elevation: 5.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child:  ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(doctorData["profilePic"] ?? ""),
+                            ),
+                            // print(doctorData["profile"]);
+                            title: Text( doctorData["firstname"] ?? "",
+                                                       style: GoogleFonts.lato(
+                                                           textStyle: Theme.of(context)
+                                                               .textTheme
+                                                               .displayLarge,
+                                                           fontSize: 20,
+                                                           fontWeight: FontWeight.w400,
+                                                           fontStyle: FontStyle.normal,
+                                                           letterSpacing: 1.0,
+                                                           color: Colors.blue),
+                                                     ),
+                            subtitle: Text( doctorData["speciality"]?? "",
+                              style: GoogleFonts.lato(
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: 1.0,
+                                  color: Colors.black),
+                            ),
+                            trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                  children: [
+                              Container(
+                                                        padding: const EdgeInsets.fromLTRB(
+                                                            0.0, 8.0, 2.0, 5.0),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment.center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment.center,
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () async {
+                                                                final Uri url = Uri(
+                                                                    scheme: 'tel',
+                                                                    path: doctorData
+                                                                        ["phoneNumber"]?? "");
+                                                                if (await canLaunchUrl(url)) {
+                                                                  await launchUrl(url);
+                                                                } else {
+                                                                  print(
+                                                                      'Cannot launch the operation');
+                                                                }
+                                                              },
+                                                              child: CircleAvatar(
+                                                                backgroundColor:
+                                                                    Theme.of(context)
+                                                                        .accentColor,
+                                                                child: const Icon(
+                                                                  Icons.call,
+                                                                  color: Color(0xFFBF828A),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(width: 10.0),
+                                                            InkWell(
+                                                              onTap: () {
+                                                                openGoogleMapsForLocationSearch(
+                                                                    doctorData
+                                                                        ["address"] ?? "");
+                                                              },
+                                                              child: CircleAvatar(
+                                                                backgroundColor:
+                                                                    Theme.of(context)
+                                                                        .accentColor,
+                                                                child: const Icon(
+                                                                  Icons.location_pin,
+                                                                  color: Color(0xFFBF828A),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(width: 10.0),
+                                                            InkWell(
+                                                              onTap: () async {
+                                                                String? encodeQueryParameters(
+                                                                    Map<String, String>
+                                                                        params) {
+                                                                  return params.entries
+                                                                      .map((MapEntry<String,
+                                                                                  String>
+                                                                              e) =>
+                                                                          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+                                                                      .join('&');
+                                                                }
 
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      child: Image(
+                                                                final Uri emailUri = Uri(
+                                                                  scheme: 'mailto',
+                                                                  path: doctorData["email"] ?? "",
+                                                                  query:
+                                                                      encodeQueryParameters(<
+                                                                          String, String>{
+                                                                    'subject':
+                                                                        'Example Subject & Symbols are allowed!',
+                                                                    'body': 'Your Message!',
+                                                                  }),
+                                                                );
+                                                                try {
+                                                                  await launchUrl(emailUri);
+                                                                } catch (e) {
+                                                                  print(e.toString());
+                                                                }
+                                                              },
+                                                              child: CircleAvatar(
+                                                                backgroundColor:
+                                                                    Theme.of(context)
+                                                                        .accentColor,
+                                                                child: const Icon(
+                                                                  Icons.email,
+                                                                  color: Color(0xFFBF828A),
+                                                                ),
+                                                              ),
+                                                            ),
 
-                                          image: NetworkImage(snapshot
-                                              .data!.docs[index]["profilePic"]),
-
-                                          fit: BoxFit.cover)),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10.0, 10.0, 5.0, 2.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              snapshot.data!.docs[index]
-                                                  ['firstname'],
-                                              style: GoogleFonts.lato(
-                                                  textStyle: Theme.of(context)
-                                                      .textTheme
-                                                      .displayLarge,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontStyle: FontStyle.normal,
-                                                  letterSpacing: 1.0,
-                                                  color: Colors.black),
-                                            ),
-                                            // const SizedBox(
-                                            //   height: 2.0,
-                                            // ),
-                                            Text(
-                                              snapshot.data!.docs[index]
-                                                  ["speciality"],
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.normal,
-                                                fontStyle: FontStyle.normal,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0.0, 8.0, 2.0, 5.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              InkWell(
-                                                onTap: () async {
-                                                  final Uri url = Uri(
-                                                      scheme: 'tel',
-                                                      path: snapshot
-                                                              .data!.docs[index]
-                                                          ["phoneNumber"]);
-                                                  if (await canLaunchUrl(url)) {
-                                                    await launchUrl(url);
-                                                  } else {
-                                                    print(
-                                                        'Cannot launch the operation');
-                                                  }
-                                                },
-                                                child: CircleAvatar(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .accentColor,
-                                                  child: const Icon(
-                                                    Icons.call,
-                                                    color: Color(0xFFBF828A),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 10.0),
-                                              InkWell(
-                                                onTap: () {
-                                                  openGoogleMapsForLocationSearch(
-                                                      snapshot.data!.docs[index]
-                                                          ["address"]);
-                                                },
-                                                child: CircleAvatar(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .accentColor,
-                                                  child: const Icon(
-                                                    Icons.location_pin,
-                                                    color: Color(0xFFBF828A),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 10.0),
-                                              InkWell(
-                                                onTap: () async {
-                                                  String? encodeQueryParameters(
-                                                      Map<String, String>
-                                                          params) {
-                                                    return params.entries
-                                                        .map((MapEntry<String,
-                                                                    String>
-                                                                e) =>
-                                                            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-                                                        .join('&');
-                                                  }
-
-                                                  final Uri emailUri = Uri(
-                                                    scheme: 'mailto',
-                                                    path: snapshot.data!
-                                                        .docs[index]["email"],
-                                                    query:
-                                                        encodeQueryParameters(<
-                                                            String, String>{
-                                                      'subject':
-                                                          'Example Subject & Symbols are allowed!',
-                                                      'body': 'Your Message!',
-                                                    }),
-                                                  );
-                                                  try {
-                                                    await launchUrl(emailUri);
-                                                  } catch (e) {
-                                                    print(e.toString());
-                                                  }
-                                                },
-                                                child: CircleAvatar(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .accentColor,
-                                                  child: const Icon(
-                                                    Icons.email,
-                                                    color: Color(0xFFBF828A),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                  ]
                             ),
                           ),
-                        ),
-                      ),
+                          ]
+                        )
+                          )
+                        );
+                      },
+
+
                     );
-                  } else {
-                    return const Center(
-                        child: CircularProgressIndicator(
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Color(0xFFBF828A)),
-                    ));
-                  }
-                },
+                    }
+                }
               ),
             ),
           ],
