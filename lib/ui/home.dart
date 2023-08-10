@@ -14,9 +14,12 @@ import 'package:thefirstone/ui/choose_nail_palm.dart';
 import 'package:thefirstone/ui/doctors.dart';
 import 'package:thefirstone/ui/language_select.dart';
 import 'package:thefirstone/ui/login.dart';
+import 'package:thefirstone/ui/nearby_hospital_google_map_in.dart';
 import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/ui/trend_graph.dart';
 import 'package:thefirstone/ui/profiles.dart';
+import 'package:thefirstone/utils/MapUtils.dart';
+import 'package:thefirstone/utils/current_location.dart';
 import 'firestore_form.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -42,7 +45,10 @@ class _HomePageState extends State<HomePage> {
   String? firstButtonText;
   String? secondButtonText;
   double textSize = 22;
-
+  String currLoc = "";
+  var details = [];
+  String date_time = "", address = "";
+  var loc = [];
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -65,6 +71,7 @@ class _HomePageState extends State<HomePage> {
     userData = API.profileData;
     gender = userData!['gender'] == "Male" ? "1" : "0";
     super.initState();
+    currentLoc();
   }
 
   int selectedRadio = 0;
@@ -583,11 +590,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    currentLoc();
+
+    try {
+      loc[0];
+    } catch (e) {
+      currentLoc();
+    }
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-
             color: Colors.white,
             child: Stack(
               children: [
@@ -691,9 +704,10 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Text(firstButtonText ??
-                                    AppLocalizations.of(context)!.selectVideo,
-                                    textAlign: TextAlign.center,
+                                Text(
+                                  firstButtonText ??
+                                      AppLocalizations.of(context)!.selectVideo,
+                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
@@ -722,9 +736,10 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Text(secondButtonText ??
-                                    AppLocalizations.of(context)!.recordVideo,
-                                    textAlign: TextAlign.center,
+                                Text(
+                                  secondButtonText ??
+                                      AppLocalizations.of(context)!.recordVideo,
+                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
@@ -741,7 +756,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
-                            width: width*.4,
+                            width: width * .4,
                             child: Column(
                               children: [
                                 InkWell(
@@ -767,13 +782,15 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Text(AppLocalizations.of(context)!.showTrend,
-                                textAlign: TextAlign.center,),
+                                Text(
+                                  AppLocalizations.of(context)!.showTrend,
+                                  textAlign: TextAlign.center,
+                                ),
                               ],
                             ),
                           ),
                           Container(
-                            width: width*.4,
+                            width: width * .4,
                             child: Column(
                               children: [
                                 InkWell(
@@ -799,8 +816,10 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Text(AppLocalizations.of(context)!.showDoctors,
-                                textAlign: TextAlign.center,),
+                                Text(
+                                  AppLocalizations.of(context)!.showDoctors,
+                                  textAlign: TextAlign.center,
+                                ),
                               ],
                             ),
                           ),
@@ -811,49 +830,99 @@ class _HomePageState extends State<HomePage> {
                     //   height: height * 0.06,
                     // ),
 
-                    SizedBox(
-                      height: height * .02,
-                    ),
                     _uploadTask != null
                         ? _uploadStatus(_uploadTask!)
                         : Offstage(),
                     // Text(hValue)
-
                     SizedBox(
-                      height: 10,
+                      height: height * .02,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => nearby_hospital()),
-                                );
-                              },
-                              child: Card(
-                                elevation: 10,
-                                child: Container(
-                                  color: Theme.of(context).accentColor,
-                                  padding: EdgeInsets.all(20),
-                                  child: Icon(
-                                    Icons.local_hospital,
-                                    color: Color(0xFFBF828A),
-                                    size: 70,
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            width: width * .4,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    currentLoc();
+
+                                    date_time = currLoc.split("{}")[0];
+                                    address = currLoc.split("{}")[2];
+                                    loc = currLoc.split("{}")[1].split(" , ");
+                                    setState(() {
+                                      currLoc;
+                                      date_time;
+                                      address;
+                                      loc;
+                                    });
+
+                                    MapUtils.openMap(double.parse(loc[0]!),
+                                        double.parse(loc[1]!));
+                                  },
+                                  child: Card(
+                                    elevation: 10,
+                                    child: Container(
+                                      color: Theme.of(context).accentColor,
+                                      padding: const EdgeInsets.all(20),
+                                      child: const Icon(
+                                        Icons.medical_information_outlined,
+                                        color: Color(0xFFBF828A),
+                                        size: 70,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.showHospitals,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              height: 10,
+                          ),
+                          SizedBox(
+                            width: width * .4,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const nearby_hospitals_google_map_in()),
+                                    );
+                                  },
+                                  child: Card(
+                                    elevation: 10,
+                                    child: Container(
+                                      color: Theme.of(context).accentColor,
+                                      padding: const EdgeInsets.all(20),
+                                      child: const Icon(
+                                        Icons.local_hospital_outlined,
+                                        color: Color(0xFFBF828A),
+                                        size: 70,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.nearbyHospitals,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
-                            Text(AppLocalizations.of(context)!.showHospitals),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -918,6 +987,13 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void currentLoc() async {
+    currLoc = await getLoc();
+    date_time = currLoc.split("{}")[0];
+    address = currLoc.split("{}")[2];
+    loc = currLoc.split("{}")[1].split(" , ");
   }
 
   Widget _uploadStatus(UploadTask task) {

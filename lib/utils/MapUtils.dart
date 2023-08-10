@@ -5,7 +5,7 @@ class MapUtils {
   MapUtils._();
 
   static Future<void> openMap(double latitude, double longitude) async {
-    String googleUrl = 'https://www.google.com/maps/search/hospitals nearby';
+    String googleUrl = 'https://www.google.com/maps/search/doctors nearby';
     // ignore: deprecated_member_use
     if (await canLaunch(googleUrl)) {
       // ignore: deprecated_member_use

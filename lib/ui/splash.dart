@@ -13,11 +13,7 @@ class splash_screen extends StatefulWidget {
   State<splash_screen> createState() => _splash_screenState();
 }
 
-
-
 class _splash_screenState extends State<splash_screen> {
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -43,12 +39,10 @@ class _splash_screenState extends State<splash_screen> {
           children: [
             Center(
               child: Image.asset('assets/login.png'),
-
             ),
             RichText(
-              text: TextSpan(
+              text: const TextSpan(
                 children: [
-
                   TextSpan(
                       text: 'AD',
                       style: TextStyle(
@@ -71,7 +65,7 @@ class _splash_screenState extends State<splash_screen> {
             const SizedBox(
               height: 20.0,
             ),
-            CircularProgressIndicator(
+            const CircularProgressIndicator(
               color: Colors.white,
               strokeWidth: 5.0,
             ),

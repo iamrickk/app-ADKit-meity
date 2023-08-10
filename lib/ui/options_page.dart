@@ -1,10 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:thefirstone/resources/auth_provider.dart';
+import 'package:thefirstone/ui/doctors_page/doctors_profile.dart';
+import 'package:thefirstone/ui/doctors_page/doctors_register_page.dart';
+import 'package:thefirstone/ui/doctors_portal.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/profiles.dart';
 
-
 final _auth = FirebaseAuth.instance;
+
 class options_page extends StatefulWidget {
   @override
   State<options_page> createState() => _options_pageState();
@@ -26,6 +31,7 @@ class _options_pageState extends State<options_page> {
 
   @override
   Widget build(BuildContext context) {
+    final ap = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
       body: Stack(
         children: [
@@ -34,41 +40,65 @@ class _options_pageState extends State<options_page> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
-                  child: Text('Role'
-                      , style:
-                  TextStyle(
+                const Center(
+                    child: Text(
+                  'Role',
+                  style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                  ),)
-                ),
-                SizedBox(
+                  ),
+                )),
+                const SizedBox(
                   height: 50,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.4,
                   child: ElevatedButton(
-                      onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => _getScreen(),));
-                      },
-                      child: Text('Patient',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => _getScreen(),
+                          ));
+                    },
+                    child: const Text(
+                      'Patient',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,
                         fontFamily: AutofillHints.addressCityAndState,
                         letterSpacing: 2.0,
                       ),
-                      ),
+                    ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.4,
                   child: ElevatedButton(
-                    onPressed: (){},
-                    child: Text('Doctor',
+                    onPressed: () async {
+                         if (ap.isSignedIn == true) {
+                        await ap.getDataFromSP().whenComplete(
+                              () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const doctors_portal(),
+                                ),
+                              ),
+                            );
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text(
+                      'Doctor',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,

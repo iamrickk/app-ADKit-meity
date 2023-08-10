@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:screen/screen.dart';
+import 'package:thefirstone/resources/auth_provider.dart';
 import 'package:thefirstone/resources/language_model.dart';
 import 'package:thefirstone/ui/options_page.dart';
 import 'package:thefirstone/ui/profiles.dart';
@@ -15,12 +17,19 @@ import 'ui/login.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(ChangeNotifierProvider(
-    create: (context) => LanguageModel(),
-    child: MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LanguageModel()),
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+      ],
+      child: MyApp(),
+      )
+  );
 }
 
 // final _auth = FirebaseAuth.instance;
@@ -48,7 +57,7 @@ class _MyAppState extends State<MyApp> {
     ].request();
 
     final info = statuses[Permission.storage].toString();
-    print(info);
+    // print(info);
   }
 
   // _getScreen() {
@@ -67,21 +76,21 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Example Dialogflow Flutter',
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        accentColor: Color(0xFFFCF0E7),
-      ),
-      debugShowCheckedModeBanner: false,
-      home: splash_screen(),
-      locale: Locale(Provider.of<LanguageModel>(context).currentLocale),
-      supportedLocales: L10n.all,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-    );
+        title: 'Example Dialogflow Flutter',
+        theme: ThemeData(
+          primaryColor: Colors.white,
+          accentColor: Color(0xFFFCF0E7),
+        ),
+        debugShowCheckedModeBanner: false,
+        home: splash_screen(),
+        locale: Locale(Provider.of<LanguageModel>(context).currentLocale),
+        supportedLocales: L10n.all,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+      );
   }
 }

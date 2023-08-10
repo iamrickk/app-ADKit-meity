@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:thefirstone/ui/home.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/personal_details.dart';
@@ -95,7 +96,7 @@ class _OtpPageState extends State<OtpPage> {
         .then((value) => {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Profiles()),
+                  MaterialPageRoute(builder: (context) => const Profiles()),
                   // value.exists ? HomePage() : PersonalDetails()),
                   (route) => false)
             });
