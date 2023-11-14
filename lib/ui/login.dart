@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:thefirstone/ui/home.dart';
 import 'package:thefirstone/ui/language_select.dart';
-import 'package:thefirstone/ui/personal_details.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
-import '../utils/firebase_auth.dart';
 import 'otp.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class LoginPage extends StatefulWidget {
@@ -12,7 +9,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // ignore: unused_field
   TextEditingController? _emailController;
+  // ignore: unused_field
   TextEditingController? _passwordController;
   TextEditingController?      _controller;
 
@@ -38,21 +37,21 @@ class _LoginPageState extends State<LoginPage> {
                   clipper: MyClipper(),
                   child: Container(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 5.0, vertical: 12.0),
+                        const EdgeInsets.symmetric(horizontal: 5.0, vertical: 12.0),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     alignment: Alignment.center,
                     height: MediaQuery.of(context).size.height * 0.4,
                     width: MediaQuery.of(context).size.width,
-                    child: Image(
+                    child: const Image(
                       image: AssetImage("assets/login.png"),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 70.0),
+                const Padding(
+                  padding:  EdgeInsets.only(top: 70.0),
                   child: Text(
                     "",
                     style: TextStyle(
@@ -114,27 +113,27 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),*/
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                   child: TextField(
                     cursorColor: Colors.black,
-                    style: TextStyle(fontSize: 18.0, color: Colors.black),
+                    style: const TextStyle(fontSize: 18.0, color: Colors.black),
                     maxLength: 10,
                     keyboardType: TextInputType.number,
                     controller: _controller,
                     decoration: InputDecoration(
                       fillColor: Colors.orange.withOpacity(0.1),
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                           borderRadius:
                               BorderRadius.all(Radius.circular(20.0))),
                       labelText: AppLocalizations.of(context)!.phoneNumber,
                       labelStyle:
-                          TextStyle(fontSize: 16.0, color: Colors.black),
-                      prefixIcon: Icon(
+                          const TextStyle(fontSize: 16.0, color: Colors.black),
+                      prefixIcon: const Icon(
                         Icons.phone,
                         color: Colors.black,
                       ),
-                      prefix: Padding(
+                      prefix: const Padding(
                         padding: EdgeInsets.all(4),
                         child: Text('+91'),
                       ),
@@ -166,14 +165,14 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: const EdgeInsets.only(left: 20.0),
                                 child: Text(
                                   AppLocalizations.of(context)!.login,
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ),
                               Expanded(
                                 child: Container(),
                               ),
                               Transform.translate(
-                                offset: Offset(15.0, 0.0),
+                                offset: const Offset(15.0, 0.0),
                                 child: Container(
                                   padding: const EdgeInsets.only(
                                     // top: 5.0,
@@ -193,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                                           MaterialStateProperty.all(
                                               Colors.white),
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.arrow_forward,
                                       color: Color(0xFFBF828A),
                                     ),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -20,13 +19,13 @@ class _NailOrPalmState extends State<NailOrPalm> {
           children: [
             Container(
               child: Text(AppLocalizations.of(context)!.appType,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 22,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   )),
               alignment: Alignment.topLeft,
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
             ),
             Column(
               children: [
@@ -36,13 +35,13 @@ class _NailOrPalmState extends State<NailOrPalm> {
                 Container(
                   child: Text(AppLocalizations.of(context)!.appTypeQ,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         color: Colors.black,
                       )),
-                  padding: EdgeInsets.all(25),
+                  padding: const EdgeInsets.all(25),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -58,7 +57,7 @@ class _NailOrPalmState extends State<NailOrPalm> {
                           child: Card(
                             elevation: 10,
                             child: Container(
-                              color: Theme.of(context).accentColor,
+                             color: Theme.of(context).colorScheme.secondary,
                               padding: EdgeInsets.all(20),
                               child: Image.asset(
                                 'assets/nail-clipper.png',
@@ -67,11 +66,11 @@ class _NailOrPalmState extends State<NailOrPalm> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(AppLocalizations.of(context)!.nail,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,
                             )),
@@ -86,8 +85,8 @@ class _NailOrPalmState extends State<NailOrPalm> {
                           child: Card(
                             elevation: 10,
                             child: Container(
-                              color: Theme.of(context).accentColor,
-                              padding: EdgeInsets.all(20),
+                              color: Theme.of(context).colorScheme.secondary,
+                              padding: const EdgeInsets.all(20),
                               child: Image.asset(
                                 'assets/hello.png',
                                 height: 60,
@@ -95,11 +94,11 @@ class _NailOrPalmState extends State<NailOrPalm> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(AppLocalizations.of(context)!.palm,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,
                             )),

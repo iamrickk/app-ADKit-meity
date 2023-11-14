@@ -1,12 +1,15 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thefirstone/resources/auth_provider.dart';
-import 'package:thefirstone/ui/doctors_page/doctors_profile.dart';
+import 'package:thefirstone/ui/admin_panel/LogInPage/log_in_page.dart';
+import 'package:thefirstone/ui/doctors_page/doctors_information_page.dart';
 import 'package:thefirstone/ui/doctors_page/doctors_register_page.dart';
-import 'package:thefirstone/ui/doctors_portal.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/profiles.dart';
+import 'package:thefirstone/ui/test_page.dart';
 
 final _auth = FirebaseAuth.instance;
 
@@ -22,7 +25,7 @@ class _options_pageState extends State<options_page> {
       if (_auth.currentUser != null) {
         // if (!_auth.currentUser!.uid.isEmpty)
         // return DoctorsPage();
-        return Profiles();
+        return const Profiles();
       }
     }
     // return Profiles();
@@ -32,86 +35,139 @@ class _options_pageState extends State<options_page> {
   @override
   Widget build(BuildContext context) {
     final ap = Provider.of<AuthProvider>(context, listen: false);
-    return Scaffold(
-      body: Stack(
-        children: [
-          RiverBackground(),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Center(
-                    child: Text(
-                  'Role',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            RiverBackground(),
+            Center(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.3,
                   ),
-                )),
-                const SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => _getScreen(),
-                          ));
-                    },
-                    child: const Text(
-                      'Patient',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontFamily: AutofillHints.addressCityAndState,
-                        letterSpacing: 2.0,
+                  const Center(
+                      child: Text(
+                    'Role',
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.05,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 8, // Adjust the elevation as needed
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              30.0), // Adjust the border radius as needed
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AdminHomePage(),
+                            ));
+                      },
+                      child: const Text(
+                        'Admin',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontFamily: AutofillHints.addressCityAndState,
+                          letterSpacing: 2.0,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                         if (ap.isSignedIn == true) {
-                        await ap.getDataFromSP().whenComplete(
-                              () => Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const doctors_portal(),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.05,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 8, // Adjust the elevation as needed
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              30.0), // Adjust the border radius as needed
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => _getScreen(),
+                            ));
+                      },
+                      child: const Text(
+                        'Patient',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontFamily: AutofillHints.addressCityAndState,
+                          letterSpacing: 2.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.05,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 8, // Adjust the elevation as needed
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              30.0), // Adjust the border radius as needed
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (ap.isSignedIn == true) {
+                          await ap.getDataFromSP().whenComplete(
+                                () => Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TestPage(),
+                                  ),
                                 ),
-                              ),
-                            );
-                      } else {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterPage(),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text(
-                      'Doctor',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontFamily: AutofillHints.addressCityAndState,
-                        letterSpacing: 2.0,
+                              );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RegisterPage(),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text(
+                        'Doctor',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontFamily: AutofillHints.addressCityAndState,
+                          letterSpacing: 2.0,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -134,7 +190,7 @@ class RiverPainter extends CustomPainter {
       ..color = Colors.blue
       ..style = PaintingStyle.fill;
 
-    final double riverWidth = 100.0;
+    // final double riverWidth = 100.0;
     final double riverHeight = size.height * 0.3;
     final double yOffset = size.height * 0.7;
 

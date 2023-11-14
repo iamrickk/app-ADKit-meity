@@ -1,10 +1,7 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/options_page.dart';
-import 'package:thefirstone/ui/profiles.dart';
 
 class splash_screen extends StatefulWidget {
   const splash_screen({super.key});
@@ -16,9 +13,8 @@ class splash_screen extends StatefulWidget {
 class _splash_screenState extends State<splash_screen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(

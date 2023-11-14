@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
@@ -23,21 +22,21 @@ class _SelectLanState extends State<SelectLan> {
                 clipper: MyClipper(),
                 child: Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 5.0, vertical: 12.0),
+                      const EdgeInsets.symmetric(horizontal: 5.0, vertical: 12.0),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: MediaQuery.of(context).size.width,
-                  child: Image(
+                  child: const Image(
                     image: AssetImage("assets/login.png"),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 40.0),
+              const Padding(
+                padding:  EdgeInsets.only(top: 40.0),
                 child: Text(
                   "Select Language",
                   style: TextStyle(
@@ -47,7 +46,7 @@ class _SelectLanState extends State<SelectLan> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
@@ -56,8 +55,8 @@ class _SelectLanState extends State<SelectLan> {
                 height: 50,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFFc9adab)),
-                child: Center(
+                    color: const Color(0xFFc9adab)),
+                child: const Center(
                   child: Text(
                     "English",
                     style: TextStyle(
@@ -74,8 +73,8 @@ class _SelectLanState extends State<SelectLan> {
                 height: 50,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFFBF828A)),
-                child: Center(
+                    color: const Color(0xFFBF828A)),
+                child: const Center(
                   child: Text(
                     "हिंदी",
                     style: TextStyle(
@@ -107,8 +106,8 @@ class _SelectLanState extends State<SelectLan> {
                         ),
                         child: Row(
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20.0),
                               child: Text(
                                 "GO TO LOGIN PAGE",
                                 style: TextStyle(color: Colors.white),
@@ -118,7 +117,7 @@ class _SelectLanState extends State<SelectLan> {
                               child: Container(),
                             ),
                             Transform.translate(
-                              offset: Offset(15.0, 0.0),
+                              offset: const Offset(15.0, 0.0),
                               child: Container(
                                 padding: const EdgeInsets.only(
                                   top: 5.0,
@@ -139,7 +138,7 @@ class _SelectLanState extends State<SelectLan> {
                                       Colors.white,
                                     ),
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.arrow_forward,
                                     color: Color(0xFFBF828A),
                                   ),

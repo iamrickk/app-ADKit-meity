@@ -1,8 +1,9 @@
+// ignore_for_file: unnecessary_null_comparison, unused_local_variable
+
 import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
 // run with `flutter run --no-sound-null-safety` for testing
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:customgauge/customgauge.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -11,20 +12,17 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/choose_nail_palm.dart';
-import 'package:thefirstone/ui/doctors.dart';
 import 'package:thefirstone/ui/language_select.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/nearby_hospital_google_map_in.dart';
-import 'package:thefirstone/ui/profiles.dart';
-import 'package:thefirstone/ui/trend_graph.dart';
-import 'package:thefirstone/ui/profiles.dart';
+import 'package:thefirstone/ui/requested_doctor/requested_doctor.dart';
+// import 'package:thefirstone/ui/trend_graph.dart';
+import 'package:thefirstone/ui/user_pov_doctor/doctors.dart';
 import 'package:thefirstone/utils/MapUtils.dart';
 import 'package:thefirstone/utils/current_location.dart';
 import 'firestore_form.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'nearby_hospital_page.dart';
-// import '../utils/firebase_auth.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -49,6 +47,8 @@ class _HomePageState extends State<HomePage> {
   var details = [];
   String date_time = "", address = "";
   var loc = [];
+  // Define your segment ranges
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
         secondButtonText = AppLocalizations.of(context)!.recordVideo;
       });
     });
-    ageControler = new TextEditingController();
+    ageControler = TextEditingController();
     // FirebaseFirestore.instance
     //     .collection('users')
     //     .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Text(
                 AppLocalizations.of(context)!.yes,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Text(
                 AppLocalizations.of(context)!.no,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
     await showDialog<void>(
         context: context,
         builder: (BuildContext context) {
-          int selectedRadio = 0;
+          // int selectedRadio = 0;
           return AlertDialog(
             content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
@@ -150,9 +150,9 @@ class _HomePageState extends State<HomePage> {
                           color1 = Colors.red;
                         });
                       },
-                      child: new Text("Male", style: TextStyle(color: color1)),
+                      child: Text("Male", style: TextStyle(color: color1)),
                     ),
-                    new GestureDetector(
+                    GestureDetector(
                       onTap: () {
                         gender = "0";
                         setState(() {
@@ -160,16 +160,15 @@ class _HomePageState extends State<HomePage> {
                           color2 = Colors.red;
                         });
                       },
-                      child:
-                          new Text("Female", style: TextStyle(color: color2)),
+                      child: Text("Female", style: TextStyle(color: color2)),
                     ),
                     TextField(
-                      decoration: new InputDecoration(labelText: "Enter age"),
+                      decoration: const InputDecoration(labelText: "Enter age"),
                       keyboardType: TextInputType.number,
                       controller: ageControler,
                     ),
                     TextButton(
-                      child: Text(
+                      child: const Text(
                         'ok',
                         style: TextStyle(fontSize: 20.0),
                       ),
@@ -196,7 +195,7 @@ class _HomePageState extends State<HomePage> {
 
   Future _selectAndUploadVideo() async {
     final type = await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => NailOrPalm()));
+        .push(MaterialPageRoute(builder: (context) => const NailOrPalm()));
     if (type == null) return;
 
     // await showPersonalDetailsDialog();
@@ -210,7 +209,7 @@ class _HomePageState extends State<HomePage> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FirestoreForm()),
+      MaterialPageRoute(builder: (context) => const FirestoreForm()),
     );
 
     //print("Download Link: $url");
@@ -266,7 +265,7 @@ class _HomePageState extends State<HomePage> {
         color = Colors.orange;
       } else if (val >= 10 && val < 11) {
         verdict = AppLocalizations.of(context)!.mildlyAnaemic;
-        color = Color(0xFFF6C21A);
+        color = const Color(0xFFF6C21A);
       } else {
         verdict = AppLocalizations.of(context)!.nonAnaemic;
         color = Colors.green;
@@ -286,7 +285,7 @@ class _HomePageState extends State<HomePage> {
         color = Colors.orange;
       } else if (val >= 11 && val < 11.5) {
         verdict = AppLocalizations.of(context)!.mildlyAnaemic;
-        color = Color(0xFFF6C21A);
+        color = const Color(0xFFF6C21A);
       } else {
         verdict = AppLocalizations.of(context)!.nonAnaemic;
         color = Colors.green;
@@ -306,7 +305,7 @@ class _HomePageState extends State<HomePage> {
         color = Colors.orange;
       } else if (val >= 11 && val < 12) {
         verdict = AppLocalizations.of(context)!.mildlyAnaemic;
-        color = Color(0xFFF6C21A);
+        color = const Color(0xFFF6C21A);
       } else {
         verdict = AppLocalizations.of(context)!.nonAnaemic;
         color = Colors.green;
@@ -328,7 +327,7 @@ class _HomePageState extends State<HomePage> {
             color = Colors.orange;
           } else if (val >= 10 && val < 11) {
             verdict = AppLocalizations.of(context)!.mildlyAnaemic;
-            color = Color(0xFFF6C21A);
+            color = const Color(0xFFF6C21A);
           } else {
             verdict = AppLocalizations.of(context)!.nonAnaemic;
             color = Colors.green;
@@ -348,7 +347,7 @@ class _HomePageState extends State<HomePage> {
             color = Colors.orange;
           } else if (val >= 11 && val < 12) {
             verdict = AppLocalizations.of(context)!.mildlyAnaemic;
-            color = Color(0xFFF6C21A);
+            color = const Color(0xFFF6C21A);
           } else {
             verdict = AppLocalizations.of(context)!.nonAnaemic;
             color = Colors.green;
@@ -369,13 +368,36 @@ class _HomePageState extends State<HomePage> {
           color = Colors.orange;
         } else if (val >= 11 && val < 13) {
           verdict = AppLocalizations.of(context)!.mildlyAnaemic;
-          color = Color(0xFFF6C21A);
+          color = const Color(0xFFF6C21A);
         } else {
           verdict = AppLocalizations.of(context)!.nonAnaemic;
           color = Colors.green;
         }
       }
     }
+    // Define your segment ranges
+    final List<GaugeRange> segments = [
+      GaugeRange(
+        startValue: 3, // Start value of the segment
+        endValue: hbRanges[0], // End value of the segment
+        color: const Color(0xFFFF0000), // Red color
+      ),
+      GaugeRange(
+        startValue: hbRanges[0], // Start value of the segment
+        endValue: hbRanges[1], // End value of the segment
+        color: const Color(0xFFFFA500), // Orange color
+      ),
+      GaugeRange(
+        startValue: hbRanges[1], // Start value of the segment
+        endValue: hbRanges[2], // End value of the segment
+        color: const Color(0xFFF6C21A), // Yellow color
+      ),
+      GaugeRange(
+        startValue: hbRanges[2], // Start value of the segment
+        endValue: hbRanges[3], // End value of the segment
+        color: const Color(0xFF008000), // Green color
+      ),
+    ];
 
     showDialog(
         context: context,
@@ -387,47 +409,109 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Center(
+                //   // This widget will be based on Gender.
+                //   // Haven't factored it in right now for testing.
+                //   child: CustomGauge(
+                //     gaugeSize: 200,
+                //     minValue: 3,
+                //     maxValue: 16,
+                //     currentValue: double.parse(val.toStringAsFixed(1)),
+                //     segments: [
+                //       GaugeSegment(
+                //           AppLocalizations.of(context)!.severelyAnaemic,
+                //           hbRanges[0],
+                //           Colors.red),
+                //       GaugeSegment(
+                //           AppLocalizations.of(context)!.moderatelyAnaemic,
+                //           hbRanges[1],
+                //           Colors.orange),
+                //       GaugeSegment(AppLocalizations.of(context)!.mildlyAnaemic,
+                //           hbRanges[2], const Color(0xFFF6C21A)),
+                //       GaugeSegment(AppLocalizations.of(context)!.nonAnaemic,
+                //           hbRanges[3], Colors.green),
+                //     ],
+                //     showMarkers: false,
+
+                //     displayWidget: Text(
+                //       '${AppLocalizations.of(context)!.haemoglobin} (gm/dl)',
+                //       style: const TextStyle(
+                //         fontSize: 12.0,
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Center(
-                  // This widget will be based on Gender.
-                  // Haven't factored it in right now for testing.
-                  child: CustomGauge(
-                    gaugeSize: 200,
-                    minValue: 3,
-                    maxValue: 16,
-                    currentValue: double.parse(val.toStringAsFixed(1)),
-                    segments: [
-                      GaugeSegment(
-                          AppLocalizations.of(context)!.severelyAnaemic,
-                          hbRanges[0],
-                          Colors.red),
-                      GaugeSegment(
-                          AppLocalizations.of(context)!.moderatelyAnaemic,
-                          hbRanges[1],
-                          Colors.orange),
-                      GaugeSegment(AppLocalizations.of(context)!.mildlyAnaemic,
-                          hbRanges[2], Color(0xFFF6C21A)),
-                      GaugeSegment(AppLocalizations.of(context)!.nonAnaemic,
-                          hbRanges[3], Colors.green),
-                    ],
-                    showMarkers: false,
-                    displayWidget: Text(
-                      '${AppLocalizations.of(context)!.haemoglobin} (gm/dl)',
-                      style: TextStyle(
-                        fontSize: 12.0,
-                      ),
+                  child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: SfRadialGauge(
+                      axes: <RadialAxis>[
+                        RadialAxis(
+                          minimum: 3,
+                          maximum: 16,
+                          showLabels: false,
+                          showTicks: false,
+                          ranges: <GaugeRange>[
+                            GaugeRange(
+                              startValue: 3,
+                              endValue: hbRanges[0],
+                              color: const Color(0xFFFF0000), // Red color
+                            ),
+                            GaugeRange(
+                              startValue: hbRanges[0],
+                              endValue: hbRanges[1],
+                              color: const Color(0xFFFFA500), // Orange color
+                            ),
+                            GaugeRange(
+                              startValue: hbRanges[1],
+                              endValue: hbRanges[2],
+                              color: const Color(0xFFF6C21A), // Yellow color
+                            ),
+                            GaugeRange(
+                              startValue: hbRanges[2],
+                              endValue: hbRanges[3],
+                              color: const Color(0xFF008000), // Green color
+                            ),
+                          ],
+                          pointers: <GaugePointer>[
+                            NeedlePointer(
+                              value: double.parse(val.toStringAsFixed(1)),
+                              needleColor: Colors.black,
+                              enableAnimation: true,
+                            ),
+                          ],
+                          // Use annotations to display additional information
+                          annotations: <GaugeAnnotation>[
+                            GaugeAnnotation(
+                              positionFactor: 0.5,
+                              widget: Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${AppLocalizations.of(context)!.haemoglobin} (gm/dl)',
+                                  style: const TextStyle(
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
+
                 Center(
                   child: Text(
                     "${AppLocalizations.of(context)!.normalRange}: ${normalRange[0]} - ${normalRange[1]} gm/dl",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Center(
@@ -439,17 +523,17 @@ class _HomePageState extends State<HomePage> {
                         color: color),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 verdict == AppLocalizations.of(context)!.nonAnaemic
-                    ? SizedBox()
-                    : Text(
+                    ? const SizedBox()
+                    : const Text(
                         "Next Steps:",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 _advise(verdict)
@@ -467,7 +551,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Text(
                   AppLocalizations.of(context)!.ok,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                   ),
                 ),
@@ -481,22 +565,22 @@ class _HomePageState extends State<HomePage> {
     if (type == AppLocalizations.of(context)!.severelyAnaemic) {
       return Text(
         AppLocalizations.of(context)!.adviceSevere,
-        style: TextStyle(fontSize: 14),
+        style: const TextStyle(fontSize: 14),
       );
     } else if (type == AppLocalizations.of(context)!.moderatelyAnaemic) {
       return Text(
         AppLocalizations.of(context)!.adviceModerate,
-        style: TextStyle(fontSize: 14),
+        style: const TextStyle(fontSize: 14),
       );
     } else if (type == AppLocalizations.of(context)!.mildlyAnaemic) {
       return Text(
         AppLocalizations.of(context)!.adviceMild,
-        style: TextStyle(fontSize: 14),
+        style: const TextStyle(fontSize: 14),
       );
     } else {
       return Text(
         AppLocalizations.of(context)!.adviceSafe,
-        style: TextStyle(fontSize: 14),
+        style: const TextStyle(fontSize: 14),
       );
     }
   }
@@ -532,7 +616,7 @@ class _HomePageState extends State<HomePage> {
 
   Future _recordVideo() async {
     final type = await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => NailOrPalm()));
+        .push(MaterialPageRoute(builder: (context) => const NailOrPalm()));
     print("app_type $type");
 
     if (type == null) return;
@@ -552,7 +636,7 @@ class _HomePageState extends State<HomePage> {
 
         await Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => FirestoreForm()),
+          MaterialPageRoute(builder: (context) => const FirestoreForm()),
         );
 
         //userData!['gender'] == "Female"
@@ -618,13 +702,13 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.bold,
                               )),
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.symmetric(vertical: 25),
+                          padding: const EdgeInsets.symmetric(vertical: 25),
                         ),
                         Container(
                           // margin: EdgeInsets.all(20),
                           child: Card(
                             elevation: 10,
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             child: IconButton(
                               onPressed: () async {
                                 await FirebaseAuth.instance.signOut();
@@ -649,7 +733,7 @@ class _HomePageState extends State<HomePage> {
                           // margin: EdgeInsets.all(20),
                           child: Card(
                             elevation: 10,
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             child: IconButton(
                               onPressed: () async {
                                 await FirebaseAuth.instance.signOut();
@@ -659,7 +743,7 @@ class _HomePageState extends State<HomePage> {
                                         builder: (context) => LoginPage()),
                                     (route) => false);
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.logout,
                                 color: Color(0xFFBF828A), //Color(0xFFBF828A),
                               ),
@@ -676,7 +760,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Container(
+                          SizedBox(
                             width: width * 0.4,
                             child: Column(
                               children: [
@@ -691,9 +775,11 @@ class _HomePageState extends State<HomePage> {
                                   child: Card(
                                     elevation: 10,
                                     child: Container(
-                                      color: Theme.of(context).accentColor,
-                                      padding: EdgeInsets.all(20),
-                                      child: Icon(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      padding: const EdgeInsets.all(20),
+                                      child: const Icon(
                                         Icons.video_library,
                                         color: Color(0xFFBF828A),
                                         size: 70,
@@ -701,7 +787,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
@@ -712,7 +798,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: width * 0.4,
                             child: Column(
                               children: [
@@ -723,9 +809,11 @@ class _HomePageState extends State<HomePage> {
                                   child: Card(
                                     elevation: 10,
                                     child: Container(
-                                      color: Theme.of(context).accentColor,
-                                      padding: EdgeInsets.all(20),
-                                      child: Icon(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      padding: const EdgeInsets.all(20),
+                                      child: const Icon(
                                         Icons.videocam,
                                         color: Color(0xFFBF828A),
                                         size: 70,
@@ -733,7 +821,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
@@ -755,7 +843,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Container(
+                          SizedBox(
                             width: width * .4,
                             child: Column(
                               children: [
@@ -763,15 +851,17 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => TrendGraph()),
+                                          builder: (context) => const requestedDocPage()),
                                     );
                                   },
                                   child: Card(
                                     elevation: 10,
                                     child: Container(
-                                      color: Theme.of(context).accentColor,
-                                      padding: EdgeInsets.all(20),
-                                      child: Icon(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      padding: const EdgeInsets.all(20),
+                                      child: const Icon(
                                         Icons.auto_graph,
                                         color: Color(0xFFBF828A),
                                         size: 70,
@@ -779,7 +869,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
@@ -789,7 +879,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: width * .4,
                             child: Column(
                               children: [
@@ -797,15 +887,18 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => DoctorsPage()),
+                                          builder: (context) =>
+                                              const VerifiedDocPage()),
                                     );
                                   },
                                   child: Card(
                                     elevation: 10,
                                     child: Container(
-                                      color: Theme.of(context).accentColor,
-                                      padding: EdgeInsets.all(20),
-                                      child: Icon(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      padding: const EdgeInsets.all(20),
+                                      child: const Icon(
                                         Icons.medical_services,
                                         color: Color(0xFFBF828A),
                                         size: 70,
@@ -813,7 +906,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
@@ -832,7 +925,7 @@ class _HomePageState extends State<HomePage> {
 
                     _uploadTask != null
                         ? _uploadStatus(_uploadTask!)
-                        : Offstage(),
+                        : const Offstage(),
                     // Text(hValue)
                     SizedBox(
                       height: height * .02,
@@ -842,7 +935,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Container(
+                          SizedBox(
                             width: width * .4,
                             child: Column(
                               children: [
@@ -866,7 +959,9 @@ class _HomePageState extends State<HomePage> {
                                   child: Card(
                                     elevation: 10,
                                     child: Container(
-                                      color: Theme.of(context).accentColor,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       padding: const EdgeInsets.all(20),
                                       child: const Icon(
                                         Icons.medical_information_outlined,
@@ -901,7 +996,9 @@ class _HomePageState extends State<HomePage> {
                                   child: Card(
                                     elevation: 10,
                                     child: Container(
-                                      color: Theme.of(context).accentColor,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       padding: const EdgeInsets.all(20),
                                       child: const Icon(
                                         Icons.local_hospital_outlined,
@@ -924,64 +1021,58 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            width: width * .4,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const requestedDocPage(),
+                                        ));
+                                  },
+                                  child: Card(
+                                    elevation: 10,
+                                    child: Container(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      padding: const EdgeInsets.all(20),
+                                      child: const Icon(
+                                        Icons.medical_information_outlined,
+                                        color: Color(0xFFBF828A),
+                                        size: 70,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text(
+                                  "Requested Doctors",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-                // GestureDetector(
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(builder: (context) => FirestoreForm()),
-                //     );
-                //   },
-                //   child: Container(
-                //     margin: EdgeInsets.only(top: height * .80, left: width - 250),
-                //     height: 60,
-                //     width: 240,
-                //     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                //     child: Card(
-                //       elevation: 10,
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(25.0),
-                //       ),
-                //       color: Color(0xFFBF828A),
-                //       child: Container(
-                //         child: new Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: <Widget>[
-                //             new Padding(
-                //               padding: const EdgeInsets.only(left: 16.0),
-                //               child: Text(
-                //                 "CHATBOT",
-                //                 style: TextStyle(
-                //                     color: Colors.white,
-                //                     fontWeight: FontWeight.w600),
-                //               ),
-                //             ),
-                //             TextButton(
-                //               shape: new RoundedRectangleBorder(
-                //                   borderRadius: new BorderRadius.circular(20.0)),
-                //               splashColor: Colors.white,
-                //               color: Colors.white,
-                //               child: Icon(
-                //                 Icons.message,
-                //                 color: Color(0xFFBF828A),
-                //               ),
-                //               onPressed: () {
-                //                 Navigator.push(
-                //                   context,
-                //                   MaterialPageRoute(
-                //                       builder: (context) => FirestoreForm()),
-                //                 );
-                //               },
-                //             ),
-                //             SizedBox(width: 1)
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
+                             ],
             ),
           ),
         ),
@@ -1011,14 +1102,14 @@ class _HomePageState extends State<HomePage> {
               child: (state == TaskState.running)
                   ? LinearProgressIndicator(
                       value: progressPercent,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Color(0xFFBF828A)),
-                      backgroundColor: Theme.of(context).accentColor,
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                          Color(0xFFBF828A)),
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                     )
-                  : Offstage(),
+                  : const Offstage(),
             );
           }
-          return Offstage();
+          return const Offstage();
         });
   }
 }

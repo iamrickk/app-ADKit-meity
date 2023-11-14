@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -43,7 +45,7 @@ class AuthProvider extends ChangeNotifier {
 
   // sign in with phone
   void signInWithPhone(BuildContext context, String phoneNumber) async {
-    print(phoneNumber);
+    // print(phoneNumber);
     try {
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -61,7 +63,7 @@ class AuthProvider extends ChangeNotifier {
               ));
         },
         codeAutoRetrievalTimeout: (verificationId) {},
-        timeout: const Duration(seconds: 10),
+        timeout: const Duration(seconds: 100),
       );
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message.toString());
@@ -101,10 +103,10 @@ class AuthProvider extends ChangeNotifier {
     DocumentSnapshot snapshot =
         await _firebaseFirestore.collection("Doctors").doc(_uid).get();
     if (snapshot.exists) {
-      print("USER EXISTS");
+      // print("USER EXISTS");
       return true;
     } else {
-      print("NEW USER");
+      // print("NEW USER");
       return false;
     }
   }
@@ -122,7 +124,8 @@ class AuthProvider extends ChangeNotifier {
       await storeFielToStorage("profilePic/$_uid", profilePic).then((value) {
         doctorModel.profilePic = value;
         doctorModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
-        doctorModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+        doctorModel.uid = _firebaseAuth
+            .currentUser!.uid; //  i have to change this value to the user id
       });
       _doctorModel = doctorModel;
 
@@ -150,27 +153,33 @@ class AuthProvider extends ChangeNotifier {
     return downloadUrl;
   }
 
-  Future getDataFromFirestore() async {
-    await _firebaseFirestore
-        .collection("Doctors")
-        .doc(_firebaseAuth.currentUser!.uid)
-        .get()
-        .then((DocumentSnapshot snapshot) {
-      _doctorModel = DoctorModel(
-          address: snapshot['address'],
-          email: snapshot['email'],
-          firstname: snapshot['firstname'],
-          phoneNumber: snapshot['phoneNumber'],
-          profilePic: snapshot['profilePic'],
-          secondname: snapshot['secondname'],
-          speciality: snapshot['speciality'],
-          uid: snapshot['uid'],
-          
-          );
+  Future<DoctorModel> getDataFromFirestore() async {
+  DocumentSnapshot snapshot = await _firebaseFirestore
+      .collection("Doctors")
+      .doc(_firebaseAuth.currentUser!.uid)
+      .get();
 
-      _uid = doctorModel.uid;
-    });
-  }
+  _doctorModel = DoctorModel(
+    address: snapshot['address'],
+    email: snapshot['email'],
+    firstname: snapshot['firstname'],
+    phoneNumber: snapshot['phoneNumber'],
+    profilePic: snapshot['profilePic'],
+    secondname: snapshot['secondname'],
+    speciality: snapshot['speciality'],
+    uid: snapshot['uid'],
+    pin: snapshot['pin'],
+    state: snapshot['state'],
+    district: snapshot['district'],
+    pending: snapshot['pending'],
+  );
+
+  _uid = _doctorModel!.uid;
+  print(_uid);
+
+  return _doctorModel!;
+}
+
 
   // storing the data locally sharepreference
   Future saveUserDatatoSP() async {
@@ -193,6 +202,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     s.clear();
   }
+
   static Stream<QuerySnapshot> doctorsList() async* {
     yield* FirebaseFirestore.instance.collection("Doctors").snapshots();
   }

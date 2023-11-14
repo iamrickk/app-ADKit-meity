@@ -6,7 +6,6 @@ import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'home.dart';
 
 class PersonalDetails extends StatefulWidget {
   @override
@@ -105,37 +104,37 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     ClipPath(
                       clipper: MyClipper(),
                       child: Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                             horizontal: 5.0, vertical: 12.0),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                         alignment: Alignment.center,
                         height: MediaQuery.of(context).size.height * 0.3,
                         width: MediaQuery.of(context).size.width,
-                        child: Image(
+                        child: const Image(
                           image: AssetImage("assets/login.png"),
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(20, 40, 20, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
                       child: TextField(
                         cursorColor: Colors.black,
-                        style: TextStyle(fontSize: 18.0, color: Colors.black),
+                        style: const TextStyle(fontSize: 18.0, color: Colors.black),
                         keyboardType: TextInputType.name,
                         controller: _firstnameController,
                         decoration: InputDecoration(
                           fillColor: Colors.orange.withOpacity(0.1),
                           filled: true,
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.0))),
                           labelText: AppLocalizations.of(context)!.firstName,
                           labelStyle:
-                              TextStyle(fontSize: 16.0, color: Colors.black),
-                          prefixIcon: Icon(
+                              const TextStyle(fontSize: 16.0, color: Colors.black),
+                          prefixIcon: const Icon(
                             Icons.person,
                             color: Colors.black,
                           ),
@@ -143,22 +142,22 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                       child: TextField(
                         cursorColor: Colors.black,
-                        style: TextStyle(fontSize: 18.0, color: Colors.black),
+                        style: const TextStyle(fontSize: 18.0, color: Colors.black),
                         keyboardType: TextInputType.name,
                         controller: _secondnameController,
                         decoration: InputDecoration(
                           fillColor: Colors.orange.withOpacity(0.1),
                           filled: true,
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.0))),
                           labelText: AppLocalizations.of(context)!.lastName,
                           labelStyle:
-                              TextStyle(fontSize: 16.0, color: Colors.black),
-                          prefixIcon: Icon(
+                              const TextStyle(fontSize: 16.0, color: Colors.black),
+                          prefixIcon: const Icon(
                             Icons.person,
                             color: Colors.black,
                           ),
@@ -166,7 +165,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -212,14 +211,14 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 ),
                               ),
                               backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).accentColor,
+                                Theme.of(context).colorScheme.secondary,
                               ),
                               overlayColor: MaterialStateProperty.all(
-                                Theme.of(context).accentColor,
+                                Theme.of(context).colorScheme.secondary,
                               ),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
+                            child: const Padding(
+                              padding:  EdgeInsets.all(5.0),
                               child: Icon(
                                 Icons.date_range,
                                 size: 30.0,
@@ -231,7 +230,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -247,7 +246,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                             ),
                             underline: Container(
                               height: 2,
-                              color: Color(0xFFBF828A),
+                              color: const Color(0xFFBF828A),
                             ),
                             onChanged: (newValue) {
                               setState(() {

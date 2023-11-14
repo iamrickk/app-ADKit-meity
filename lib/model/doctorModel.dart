@@ -7,6 +7,10 @@ class DoctorModel {
   String phoneNumber;
   String uid;
   String address;
+  String pin;
+  String state;
+  String district;
+  bool pending;
 
   DoctorModel({
     required this.firstname,
@@ -17,6 +21,10 @@ class DoctorModel {
     required this.phoneNumber,
     required this.uid,
     required this.address,
+    required this.pin,
+    required this.state,
+    required this.district,
+    required this.pending,
   });
 
   // from map
@@ -30,6 +38,10 @@ class DoctorModel {
       phoneNumber: map['phoneNumber'] ?? '',
       profilePic: map['profilePic'] ?? '',
       address: map['address'] ?? '',
+      pin: map['pin'] ?? '',
+      state: map['state'] ?? '',
+      district: map['district'] ?? '',
+      pending: map['pending'] ?? '',
     );
   }
 
@@ -44,6 +56,10 @@ class DoctorModel {
       "phoneNumber": phoneNumber,
       "profilePic": profilePic,
       "address": address,
+      "pin": pin,
+      "state": state,
+      "district": district,
+      "pending" : pending,
     };
   }
 }

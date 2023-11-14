@@ -1,19 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: unused_local_variable
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:screen/screen.dart';
 import 'package:thefirstone/resources/auth_provider.dart';
 import 'package:thefirstone/resources/language_model.dart';
-import 'package:thefirstone/ui/options_page.dart';
-import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/ui/splash.dart';
 import 'l10n/l10n.dart';
-import 'ui/login.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
@@ -45,7 +43,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Screen.keepOn(true);
+    // Screen.keepOn(true);
+    // Keep the screen on.
+      KeepScreenOn.turnOn();
     _requestPermission();
   }
 
@@ -79,10 +79,13 @@ class _MyAppState extends State<MyApp> {
         title: 'Example Dialogflow Flutter',
         theme: ThemeData(
           primaryColor: Colors.white,
-          accentColor: Color(0xFFFCF0E7),
+          // accentColor: Color(0xFFFCF0E7),
+          colorScheme: ThemeData.light().colorScheme.copyWith(
+          secondary: const Color(0xFFFCF0E7), // Set your custom accent color here
+        ),
         ),
         debugShowCheckedModeBanner: false,
-        home: splash_screen(),
+        home: const splash_screen(),
         locale: Locale(Provider.of<LanguageModel>(context).currentLocale),
         supportedLocales: L10n.all,
         localizationsDelegates: const [

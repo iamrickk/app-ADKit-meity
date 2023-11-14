@@ -1,11 +1,10 @@
+// ignore_for_file: unnecessary_null_comparison, unused_local_variable, avoid_init_to_null, unused_field
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:thefirstone/resources/api.dart';
-import 'package:thefirstone/ui/home.dart';
 
 class FirestoreForm extends StatefulWidget {
   const FirestoreForm({Key? key}) : super(key: key);
@@ -168,7 +167,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: FutureBuilder(
             future: API.translate(
                 "Which of the following symptoms do you have?",
@@ -178,7 +177,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
               dropdownValue != 'en'
                   ? snapshot.data.toString()
                   : "Which of the following symptoms do you have?",
-              style: TextStyle(
+              style: const TextStyle(
                 // color: Color(0xFFBF828A),
                 fontSize: 28.0,
                 fontWeight: FontWeight.w900,
@@ -207,7 +206,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                       padding: const EdgeInsets.all(10.0),
                       child: Row(children: [
                         Checkbox(
-                          activeColor: Color(0xFFBF828A),
+                          activeColor: const Color(0xFFBF828A),
                           value: checkList[index],
                           onChanged: (bool? val) {
                             setState(() {
@@ -234,7 +233,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                                 dropdownValue != 'en'
                                     ? snapshot.data.toString()
                                     : list[index]['name'],
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(fontSize: 16),
                               );
                             }),
                       ]),
@@ -316,7 +315,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: FutureBuilder(
             future: API.translate("Choose a suitable option about $question",
                 'en', dropdownValue),
@@ -324,7 +323,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
               dropdownValue != 'en'
                   ? snapshot.data.toString()
                   : "Choose a suitable option about $question",
-              style: TextStyle(
+              style: const TextStyle(
                 // color: Color(0xFFBF828A),
                 fontSize: 28.0,
                 fontWeight: FontWeight.w900,
@@ -335,14 +334,14 @@ class _FirestoreFormState extends State<FirestoreForm> {
         Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: FutureBuilder(
                 future: API.translate(subQuestion['name'], 'en', dropdownValue),
                 builder: (context, snapshot) => Text(
                   dropdownValue != 'en'
                       ? snapshot.data.toString()
                       : subQuestion['name'],
-                  style: TextStyle(
+                  style: const TextStyle(
                     // color: Color(0xFFBF828A),
                     fontSize: 20.0,
                     fontWeight: FontWeight.w600,
@@ -351,7 +350,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
               ),
             ),
             ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: options.length,
                 itemBuilder: (BuildContext context, int i) {
@@ -384,7 +383,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                                 v = value!;
                               });
                             },
-                            activeColor: Color(0xFFBF828A),
+                            activeColor: const Color(0xFFBF828A),
                           ),
                           FutureBuilder(
                             future:
@@ -393,7 +392,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                               dropdownValue != 'en'
                                   ? snapshot.data.toString()
                                   : options[i],
-                              style: TextStyle(fontSize: 16.0),
+                              style: const TextStyle(fontSize: 16.0),
                             ),
                           ),
                         ]),
@@ -480,7 +479,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
         children: [
           Scaffold(
             body: list.isEmpty
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                         Color(0xFFBF828A),
@@ -495,13 +494,13 @@ class _FirestoreFormState extends State<FirestoreForm> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Display Language"),
+                            const Text("Display Language"),
                             DropdownButton<String>(
                               value: dropdownValue,
                               icon: const Icon(Icons.arrow_downward),
                               elevation: 16,
                               style: const TextStyle(
-                                  color: const Color(0xFFBF828A)),
+                                  color:  Color(0xFFBF828A)),
                               underline: Container(
                                 height: 2,
                                 color: const Color(0xFFBF828A),
@@ -529,7 +528,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                               ? getSubQuestionsView()
                               : getQuestionsView(list)),
                       Padding(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -604,7 +603,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                                           .length ==
                                       0) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
+                                        const SnackBar(
                                             content: Text(
                                                 'Please select atleast one symptom')));
                                     return;
@@ -643,15 +642,15 @@ class _FirestoreFormState extends State<FirestoreForm> {
             right: 5,
             bottom: 80,
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: ClipOval(
                 child: Material(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   child: SizedBox(
                     width: 56,
                     height: 56,
                     child: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.volume_up,
                         color: Color(0xFFBF828A),
                       ),

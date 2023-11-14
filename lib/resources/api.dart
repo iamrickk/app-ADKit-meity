@@ -1,9 +1,12 @@
+// ignore_for_file: unused_catch_clause
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:translator/translator.dart';
@@ -40,7 +43,9 @@ class API {
         return null;
       }
       var body = jsonDecode(response.body);
-      print(body['val'].toStringAsFixed(2));
+      if (kDebugMode) {
+        print(body['val'].toStringAsFixed(2));
+      }
 
       return body['val'];
     }
@@ -60,7 +65,9 @@ class API {
 
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
-      print(body['val']);
+      if (kDebugMode) {
+        print(body['val']);
+      }
 
       return double.parse(body['val']);
     }
@@ -71,7 +78,7 @@ class API {
   static UploadTask? uploadVideo(File file) {
     try {
       var storagePath = _firebaseStorageRef.child(
-          'VideoG' + new DateTime.now().millisecondsSinceEpoch.toString());
+          'VideoG' +  DateTime.now().millisecondsSinceEpoch.toString());
       return storagePath.putFile(file);
     } on FirebaseException catch (e) {
       return null;
@@ -104,6 +111,85 @@ class API {
       "time": DateTime.now(),
     });
   }
+
+  static void addDoctorNames(Map<String, dynamic> doctorNames) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("profiles")
+        .doc(API.current_profile_id)
+        .collection(
+            'doctor_names') // Change 'chatbot_responses' to 'doctor_names'
+        .add({
+      "name": doctorNames['name'], // Store the list of doctor names
+      "speciality": doctorNames['speciality'],
+      "phoneNumber": doctorNames['phoneNumber'],
+      "email": doctorNames['email'],
+      "address": doctorNames['address'],
+      "imgpath": doctorNames['imgpath'],
+      "time": DateTime.now(),
+    }); // Use SetOptions to merge the data with existing data if any
+  }
+  static void addUserNames(String phoneNumber,String uid) async {
+    try {
+      FirebaseFirestore.instance
+          .collection('Doctors')
+          .doc(uid) // Assuming phone number is the document ID
+          .collection('User_list')
+          .add({
+          'user_id' : FirebaseAuth.instance.currentUser!.uid,
+          'profile_id' : API.current_profile_id,
+          'status' : "pending",
+      });
+
+      // Check if the query returned any results
+
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding user details to the new collection: $e');
+      }
+    }
+  }
+
+  static Future<bool> doesDoctorDataExist(String phoneNumber) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("profiles")
+          .doc(API.current_profile_id)
+          .collection('doctor_names')
+          .where('phoneNumber',
+              isEqualTo: phoneNumber) // Check for the specific value
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Documents matching the condition exist
+        if (kDebugMode) {
+          print("yes, we have");
+        }
+        return true;
+      } else {
+        // No documents matching the condition found
+        return false;
+        // print('No Gynecologist doctors found.');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error checking doctor data: $e');
+      }
+      return false;
+    }
+  }
+
+// bool doctorExists = await doesDoctorDataExist('DoctorPhoneNumberToCheck');
+// if (doctorExists) {
+//   // Data for the doctor exists, you can take appropriate action here
+//   print('Doctor data exists');
+// } else {
+//   // Data for the doctor does not exist
+//   print('Doctor data does not exist');
+// }
 
   static Stream<QuerySnapshot> doctorsList() async* {
     yield* FirebaseFirestore.instance.collection('doctors').snapshots();

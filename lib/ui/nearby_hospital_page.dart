@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/MapUtils.dart';
@@ -40,12 +39,12 @@ class _nearby_hospitalState extends State<nearby_hospital> {
             Center(
               child: Container(
                 child: Text(AppLocalizations.of(context)!.nearbyHospitals,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 25.0,
                     fontWeight: FontWeight.bold,
                   ),),
                 //alignment: Alignment.topLeft,
-                padding: EdgeInsets.all(25),
+                padding: const EdgeInsets.all(25),
               ),
             ),
             SizedBox(
@@ -54,13 +53,13 @@ class _nearby_hospitalState extends State<nearby_hospital> {
             Container(
               // margin: EdgeInsets.all(10),
               height: MediaQuery.of(context).size.height * 0.2,
-              color: Color(0xFFBF828A),
+              color: const Color(0xFFBF828A),
               // width: MediaQuery.of(context).size.height * 0.5,
               // decoration: BoxDecoration(
               //     color: Colors.orange,
               //     borderRadius: BorderRadius.circular(10)),
               child: ElevatedButton(
-                child: Text(
+                child: const Text(
                   "See nearby hospitals in GMap",
                   style: TextStyle(color: Colors.black),
                 ),

@@ -1,18 +1,15 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:thefirstone/resources/auth_provider.dart';
-import 'package:thefirstone/ui/doctors_page/doctors_profile.dart';
 
-import '../doctors_portal.dart';
+import '../../widgets/snack_bar.dart';
 
 class RegisterPage extends StatefulWidget {
-  const   RegisterPage({super.key});
+  const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -21,6 +18,9 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController phoneNumber = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool isTap = false;
+  bool isFilled = false;
+
   Country country = Country(
       phoneCode: "91",
       countryCode: "IN",
@@ -65,15 +65,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                         // print('HI');
                                         Navigator.pop(context);
                                       },
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ),
                                   ],
                                 )
                               ],
                             ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.2,
-                            ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * 0.2,
+                            // ),
                             Container(
                               height: MediaQuery.of(context).size.height * 0.15,
                               margin: const EdgeInsets.all(20.0),
@@ -85,13 +85,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
-                                child: AnimatedTextKit(
-                                  animatedTexts: [
-                                    TyperAnimatedText(
-                                      "Welcome \n Back!",
-                                      speed: const Duration(milliseconds: 200),
-                                    ),
-                                  ],
+                                child: const Text(
+                                  "Welcome \n Back!",
                                 ),
                               ),
                             ),
@@ -177,11 +172,39 @@ class _RegisterPageState extends State<RegisterPage> {
                                         child: IconButton(
                                             color: Colors.white,
                                             onPressed: () {
-                                              sendPhoneNumber();
+                                              if (phoneNumber.text.length ==
+                                                  10) {
+                                                sendPhoneNumber();
+                                              }
+
+                                              setState(() {
+                                                isTap = true;
+                                                if (phoneNumber.text.length ==
+                                                    10) {
+                                                  isFilled = true;
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(MySnackBars
+                                                          .createSnackBar(
+                                                    title:
+                                                        "Phone Number Invalid",
+                                                    message:
+                                                        "Enter the 10 Digit Phone Number",
+                                                    contentType:
+                                                        ContentType.warning,
+                                                  ));
+                                                }
+                                              });
                                             },
-                                            icon: const Icon(
-                                              CupertinoIcons.checkmark_alt,
-                                            )),
+                                            highlightColor: Colors.amberAccent,
+                                            icon: (isFilled == false)
+                                                ? const Icon(
+                                                    CupertinoIcons
+                                                        .checkmark_alt,
+                                                  )
+                                                : const CircularProgressIndicator(
+                                                    color: Colors.white,
+                                                  )),
                                       )
                                     ],
                                   ),

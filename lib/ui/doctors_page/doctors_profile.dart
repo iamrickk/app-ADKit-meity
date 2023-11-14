@@ -166,10 +166,11 @@ class _DoctorProfileState extends State<DoctorProfile> {
   }
 }
 
+// ignore: must_be_immutable
 class ProfileMenuWidget extends StatelessWidget {
   String? title;
   IconData? icon;
-  ProfileMenuWidget({
+  ProfileMenuWidget({super.key, 
     required this.title,
     required this.icon,
   });

@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
 import '../../resources/auth_provider.dart';
@@ -25,7 +23,7 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/background_image.png'), fit: BoxFit.cover),
           ),
@@ -115,7 +113,7 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
                                   height: 30,
                                 ),
                                 TextFormField(
-                                  style: TextStyle(),
+                                  style: const TextStyle(),
                                   // obscureText: true,
                                   decoration: InputDecoration(
                                       fillColor: Colors.grey.shade100,
@@ -131,7 +129,7 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
 
 
                                 TextFormField(
-                                  style: TextStyle(),
+                                  style: const TextStyle(),
                                   obscureText: true,
                                   decoration: InputDecoration(
                                       fillColor: Colors.grey.shade100,
@@ -146,7 +144,7 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
                                   height: 30,
                                 ),
                                 TextFormField(
-                                  style: TextStyle(),
+                                  style: const TextStyle(),
                                   obscureText: true,
                                   decoration: InputDecoration(
                                       fillColor: Colors.grey.shade100,
@@ -161,7 +159,7 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
                                   height: 30,
                                 ),
                                 TextFormField(
-                                  style: TextStyle(),
+                                  style: const TextStyle(),
                                   // obscureText: true,
                                   decoration: InputDecoration(
                                       fillColor: Colors.grey.shade100,
@@ -181,19 +179,19 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
 
                                     CircleAvatar(
                                       radius: 30,
-                                      backgroundColor: Color(0xff4c505b),
+                                      backgroundColor: const Color(0xff4c505b),
                                       child: IconButton(
                                           color: Colors.white,
                                           onPressed: () {
 
                                           },
-                                          icon: Icon(
+                                          icon: const Icon(
                                             CupertinoIcons.checkmark_alt,
                                           )),
                                     )
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 40,
                                 ),
 
