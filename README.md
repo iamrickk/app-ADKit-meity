@@ -12,11 +12,14 @@ Smartphone Based Artificial Intelligence Enabled Portable Low-cost Anemia Detect
   - Different Portals One for User and One for Doctor.
   - Minor UI Changes
   - Profile Page for Doctors portal.
+  - Search Page for Doctors to find the user
+  - Added features like onTap call,Email,location Screen forward
+  - 
     
 
 # Future Updates:
   - Pause and Resume options for uploading video.
-  - Search Page for Doctors to find the user
+   
     
 
 ## Getting Started
