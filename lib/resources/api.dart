@@ -84,7 +84,7 @@ class API {
       return null;
     }
   }
-
+  
   static void addResult(double hb, String type) {
     FirebaseFirestore.instance
         .collection('users')
@@ -121,13 +121,14 @@ class API {
         .collection(
             'doctor_names') // Change 'chatbot_responses' to 'doctor_names'
         .add({
-      "name": doctorNames['name'], // Store the list of doctor names
-      "speciality": doctorNames['speciality'],
+      // "name": doctorNames['name'], // Store the list of doctor names
+      // "speciality": doctorNames['speciality'],
       "phoneNumber": doctorNames['phoneNumber'],
-      "email": doctorNames['email'],
-      "address": doctorNames['address'],
-      "imgpath": doctorNames['imgpath'],
-      "time": DateTime.now(),
+      // "email": doctorNames['email'],
+      // "address": doctorNames['address'],
+      // "imgpath": doctorNames['imgpath'],
+      // "time": DateTime.now(),
+      "uid" : doctorNames['uid'],
     }); // Use SetOptions to merge the data with existing data if any
   }
   static void addUserNames(String phoneNumber,String uid) async {
@@ -181,6 +182,7 @@ class API {
       return false;
     }
   }
+  
 
 // bool doctorExists = await doesDoctorDataExist('DoctorPhoneNumberToCheck');
 // if (doctorExists) {

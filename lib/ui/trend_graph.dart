@@ -260,7 +260,7 @@
 //             return FlSpot(month.toDouble(), hb_val);
 //           }).toList(),
 //           // isCurved: true,
-//           colors: [const Color(0xFFBF828A)],
+//           color: const Color(0xFFBF828A),
 //           barWidth: 3,
 //           isStrokeCapRound: true,
 //           dotData: const FlDotData(

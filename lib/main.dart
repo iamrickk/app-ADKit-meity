@@ -19,15 +19,13 @@ void main() async {
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => LanguageModel()),
-        ChangeNotifierProvider(create: (context) => AuthProvider()),
-      ],
-      child: MyApp(),
-      )
-  );
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => LanguageModel()),
+      ChangeNotifierProvider(create: (context) => AuthProvider()),
+    ],
+    child: MyApp(),
+  ));
 }
 
 // final _auth = FirebaseAuth.instance;
@@ -45,7 +43,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     // Screen.keepOn(true);
     // Keep the screen on.
-      KeepScreenOn.turnOn();
+    // KeepScreenOn.turnOn();
     _requestPermission();
   }
 
@@ -76,24 +74,25 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Example Dialogflow Flutter',
-        theme: ThemeData(
-          primaryColor: Colors.white,
-          // accentColor: Color(0xFFFCF0E7),
-          colorScheme: ThemeData.light().colorScheme.copyWith(
-          secondary: const Color(0xFFFCF0E7), // Set your custom accent color here
-        ),
-        ),
-        debugShowCheckedModeBanner: false,
-        home: const splash_screen(),
-        locale: Locale(Provider.of<LanguageModel>(context).currentLocale),
-        supportedLocales: L10n.all,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-      );
+      title: 'Example Dialogflow Flutter',
+      theme: ThemeData(
+        primaryColor: Colors.white,
+        // accentColor: Color(0xFFFCF0E7),
+        colorScheme: ThemeData.light().colorScheme.copyWith(
+              secondary:
+                  const Color(0xFFFCF0E7), // Set your custom accent color here
+            ),
+      ),
+      debugShowCheckedModeBanner: false,
+      home: const splash_screen(),
+      locale: Locale(Provider.of<LanguageModel>(context).currentLocale),
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+    );
   }
 }

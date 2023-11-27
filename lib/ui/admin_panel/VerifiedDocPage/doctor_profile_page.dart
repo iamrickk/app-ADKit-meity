@@ -1,11 +1,8 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../../../widgets/snack_bar.dart';
 
 class DoctorProfilePage extends StatefulWidget {
   final String? imgpath;
@@ -14,6 +11,9 @@ class DoctorProfilePage extends StatefulWidget {
   final String? phoneNumber;
   final String? address;
   final String? email;
+  final String? pin;
+  final String? state;
+  final String? city;
 
   const DoctorProfilePage({
     super.key,
@@ -23,6 +23,9 @@ class DoctorProfilePage extends StatefulWidget {
     required this.phoneNumber,
     required this.email,
     required this.address,
+    required this.pin,
+    required this.state,
+    required this.city,
   });
 
   @override
@@ -102,120 +105,294 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                         const SizedBox(height: 16.0),
 
                         // Other details (you can customize as needed)
-                        Row(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            InkWell(
-                              onTap: () async {
-                                final Uri url = Uri(
-                                    scheme: 'tel',
-                                    path: widget.phoneNumber ?? "");
-                                if (await canLaunchUrl(url)) {
-                                  await launchUrl(url);
-                                } else {
-                                  print('Cannot launch the operation');
-                                }
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Theme.of(context).colorScheme.secondary,
-                                child: const Icon(
-                                  Icons.call,
-                                  color: Color(0xFFBF828A),
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: () async {
+                                    final Uri url = Uri(
+                                        scheme: 'tel',
+                                        path: widget.phoneNumber ?? "");
+                                    if (await canLaunchUrl(url)) {
+                                      await launchUrl(url);
+                                    } else {
+                                      print('Cannot launch the operation');
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    child: const Icon(
+                                      Icons.call,
+                                      color: Color(0xFFBF828A),
+                                    ),
+                                    radius: 20,
+                                  ),
                                 ),
-                                radius: 20,
-                              ),
-                            ),
-                            const SizedBox(width: 10.0),
-                            InkWell(
-                              onTap: () {
-                                openGoogleMapsForLocationSearch(
-                                    widget.address ?? "");
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Theme.of(context).colorScheme.secondary,
-                                child: const Icon(
-                                  Icons.location_pin,
-                                  color: Color(0xFFBF828A),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.1,
                                 ),
-                                radius: 20,
-                              ),
+                                Text(
+                                  widget.phoneNumber ?? '',
+                                  style: GoogleFonts.lato(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .displayLarge,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 1.0,
+                                      color: Colors.black),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 10.0),
-                            InkWell(
-                              onTap: () async {
-                                String? encodeQueryParameters(
-                                    Map<String, String> params) {
-                                  return params.entries
-                                      .map((MapEntry<String, String> e) =>
-                                          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-                                      .join('&');
-                                }
+                            const SizedBox(height: 10.0),
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    openGoogleMapsForLocationSearch(
+                                        widget.address ?? "");
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    child: const Icon(
+                                      Icons.location_pin,
+                                      color: Color(0xFFBF828A),
+                                    ),
+                                    radius: 20,
+                                  ),
+                                ),
+                                const SizedBox(width: 10.0),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.1,
+                                ),
+                                Text(
+                                  widget.address ?? '',
+                                  style: GoogleFonts.lato(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .displayLarge,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 1.0,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () async {
+                                    String? encodeQueryParameters(
+                                        Map<String, String> params) {
+                                      return params.entries
+                                          .map((MapEntry<String, String> e) =>
+                                              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+                                          .join('&');
+                                    }
 
-                                final Uri emailUri = Uri(
-                                  scheme: 'mailto',
-                                  path: widget.email ?? "",
-                                  query: encodeQueryParameters(<String, String>{
-                                    'subject':
-                                        'Example Subject & Symbols are allowed!',
-                                    'body': 'Your Message!',
-                                  }),
-                                );
-                                try {
-                                  await launchUrl(emailUri);
-                                } catch (e) {
-                                  print(e.toString());
-                                }
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Theme.of(context).colorScheme.secondary,
-                                child: const Icon(
-                                  Icons.email,
-                                  color: Color(0xFFBF828A),
+                                    final Uri emailUri = Uri(
+                                      scheme: 'mailto',
+                                      path: widget.email ?? "",
+                                      query: encodeQueryParameters(<String,
+                                          String>{
+                                        'subject':
+                                            'Example Subject & Symbols are allowed!',
+                                        'body': 'Your Message!',
+                                      }),
+                                    );
+                                    try {
+                                      await launchUrl(emailUri);
+                                    } catch (e) {
+                                      print(e.toString());
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    child: const Icon(
+                                      Icons.email,
+                                      color: Color(0xFFBF828A),
+                                    ),
+                                    radius: 20,
+                                  ),
                                 ),
-                                radius: 20,
-                              ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.1,
+                                ),
+                                Text(
+                                  widget.email ?? '',
+                                  style: GoogleFonts.lato(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .displayLarge,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 1.0,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () async {},
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    child: const Icon(
+                                      Icons.pin,
+                                      color: Color(0xFFBF828A),
+                                    ),
+                                    radius: 20,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.1,
+                                ),
+                                Text(
+                                  "Pin :  ${widget.pin ?? ''}",
+                                  style: GoogleFonts.lato(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .displayLarge,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 1.0,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () async {},
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    child: const Icon(
+                                      Icons.add_business_rounded,
+                                      color: Color(0xFFBF828A),
+                                    ),
+                                    radius: 20,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.1,
+                                ),
+                                Text(
+                                  "State :  ${widget.state ?? ''}",
+                                  style: GoogleFonts.lato(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .displayLarge,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 1.0,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () async {},
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    child: const Icon(
+                                      Icons.add_business_rounded,
+                                      color: Color(0xFFBF828A),
+                                    ),
+                                    radius: 20,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.1,
+                                ),
+                                Text(
+                                  "City :  ${widget.city ?? ''}",
+                                  style: GoogleFonts.lato(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .displayLarge,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 1.0,
+                                      color: Colors.black),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                         const SizedBox(
                           height: 10.0,
                         ),
-                        CircleAvatar(
-                          radius: 25.0,
-                          child: IconButton(
-                            onPressed: () {
-                              isadded == true
-                                  ? MySnackBars.createSnackBar(
-                                      // context: context,
-                                      // message: 'Doctor Already Added',
-                                      // backgroundColor: Colors.blue.shade800,
-                                      // textColor: Colors.white,
-                                      // duration: const Duration(seconds: 4),
-                                      title : "Already Added!",
-                                      contentType: ContentType.success,
-                                      message: "This Doctor is already added!"
-                                    )
-                                  : MySnackBars.createSnackBar(
-                                      // context: context,
-                                      // message: 'Added The Doctor Succesfully',
-                                      // backgroundColor: Colors.blue.shade800,
-                                      // textColor: Colors.white,
-                                      // duration: const Duration(seconds: 4),
-                                      title: "Added!",
-                                      contentType: ContentType.success,
-                                      message: "Doctor Added Succesfull!",
-                                    );
-                              setState(() {
-                                isadded = true;
-                              });
-                            },
-                            icon: isadded
-                                ? const Icon(CupertinoIcons.checkmark_alt)
-                                : const Icon(Icons.add),
-                            color: Colors.white,
-                            iconSize: 30.0,
-                          ),
-                        )
+                        // CircleAvatar(
+                        //   radius: 25.0,
+                        //   child: IconButton(
+                        //     onPressed: () {
+                        //       isadded == true
+                        //           ? MySnackBars.createSnackBar(
+                        //               // context: context,
+                        //               // message: 'Doctor Already Added',
+                        //               // backgroundColor: Colors.blue.shade800,
+                        //               // textColor: Colors.white,
+                        //               // duration: const Duration(seconds: 4),
+                        //               title : "Already Added!",
+                        //               contentType: ContentType.success,
+                        //               message: "This Doctor is already added!"
+                        //             )
+                        //           : MySnackBars.createSnackBar(
+                        //               // context: context,
+                        //               // message: 'Added The Doctor Succesfully',
+                        //               // backgroundColor: Colors.blue.shade800,
+                        //               // textColor: Colors.white,
+                        //               // duration: const Duration(seconds: 4),
+                        //               title: "Added!",
+                        //               contentType: ContentType.success,
+                        //               message: "Doctor Added Succesfull!",
+                        //             );
+                        //       setState(() {
+                        //         isadded = true;
+                        //       });
+                        //     },
+                        //     icon: isadded
+                        //         ? const Icon(CupertinoIcons.checkmark_alt)
+                        //         : const Icon(Icons.add),
+                        //     color: Colors.white,
+                        //     iconSize: 30.0,
+                        //   ),
+                        // )
                       ],
                     ),
                   ),

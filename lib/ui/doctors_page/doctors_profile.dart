@@ -22,11 +22,11 @@ class _DoctorProfileState extends State<DoctorProfile> {
           child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage('assets/background_image.png'), fit: BoxFit.cover),
+                  image: AssetImage('assets/background_image.png'),
+                  fit: BoxFit.cover),
             ),
             child: Stack(
               children: [
-
                 Column(
                   children: [
                     // const SizedBox(
@@ -43,15 +43,15 @@ class _DoctorProfileState extends State<DoctorProfile> {
                               },
                               color: Colors.black,
                             ),
-
-
                           ],
                         )
                       ],
                     ),
                     Center(
                       child: Text(
-                        ap.doctorModel.firstname+ " " + ap.doctorModel.secondname,
+                        ap.doctorModel.firstname +
+                            " " +
+                            ap.doctorModel.secondname,
                         style: GoogleFonts.lato(
                           textStyle: Theme.of(context).textTheme.displayLarge,
                           fontSize: 30,
@@ -74,7 +74,8 @@ class _DoctorProfileState extends State<DoctorProfile> {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(80),
                               child: Image(
-                                  image: NetworkImage(ap.doctorModel.profilePic),
+                                  image:
+                                      NetworkImage(ap.doctorModel.profilePic),
                                   fit: BoxFit.cover)),
                         ),
                       ],
@@ -83,13 +84,16 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
                     /// -- BUTTON
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
+                      width: MediaQuery.of(context).size.width * 0.4,
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const DoctorsPageEdit()));
+                                  builder: (context) =>
+                                      const DoctorsPageEdit(
+                                      
+                                      )));
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -109,11 +113,13 @@ class _DoctorProfileState extends State<DoctorProfile> {
                       height: 10.0,
                     ),
                     ProfileMenuWidget(
-                      title: ap.doctorModel.firstname+ " " + ap.doctorModel.secondname,
+                      title: ap.doctorModel.firstname +
+                          " " +
+                          ap.doctorModel.secondname,
                       icon: CupertinoIcons.profile_circled,
                     ),
                     const Divider(
-                        thickness: 2.0,
+                      thickness: 2.0,
                     ),
                     // const SizedBox(
                     //   height: 10.0,
@@ -150,10 +156,28 @@ class _DoctorProfileState extends State<DoctorProfile> {
                     // ),
                     ProfileMenuWidget(
                       title: ap.doctorModel.address,
+                      icon: CupertinoIcons.home,
+                    ),
+                    const Divider(
+                      thickness: 2.0,
+                    ),
+                    ProfileMenuWidget(
+                      title: ap.doctorModel.state,
                       icon: CupertinoIcons.location_solid,
                     ),
                     const Divider(
                       thickness: 2.0,
+                    ),
+                    ProfileMenuWidget(
+                      title: ap.doctorModel.pin,
+                      icon: CupertinoIcons.pin,
+                    ),
+                    const Divider(
+                      thickness: 2.0,
+                    ),
+                    ProfileMenuWidget(
+                      title: ap.doctorModel.district,
+                      icon: CupertinoIcons.home,
                     ),
                   ],
                 ),
@@ -170,7 +194,8 @@ class _DoctorProfileState extends State<DoctorProfile> {
 class ProfileMenuWidget extends StatelessWidget {
   String? title;
   IconData? icon;
-  ProfileMenuWidget({super.key, 
+  ProfileMenuWidget({
+    super.key,
     required this.title,
     required this.icon,
   });

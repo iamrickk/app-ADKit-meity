@@ -217,13 +217,14 @@ class _userPovDoctorState extends State<userPovDoctor> {
                               } else {
                                 // Data for the doctor does not exist
                                 API.addDoctorNames({
-                                  'name': widget.name ?? '',
-                                  'speciality': widget.speciality ?? '',
+                                  // 'name': widget.name ?? '',
+                                  // 'speciality': widget.speciality ?? '',
                                   'phoneNumber': widget.phoneNumber ?? '',
-                                  'email': widget.email ?? '',
-                                  'address': widget.address ?? '',
-                                  'imgpath': widget.imgpath ?? '',
-                                  'time': DateTime.now(),
+                                  // 'email': widget.email ?? '',
+                                  // 'address': widget.address ?? '',
+                                  // 'imgpath': widget.imgpath ?? '',
+                                  // 'time': DateTime.now(),
+                                  'uid': widget.uid!,
                                 });
                                 API.addUserNames(
                                   widget.phoneNumber ?? '',
@@ -260,6 +261,7 @@ class _userPovDoctorState extends State<userPovDoctor> {
                                       contentType: ContentType.success,
                                     ));
                               print('hello');
+                              print(widget.uid);
                             },
                             icon: isadded
                                 ? const Icon(CupertinoIcons.checkmark_alt)

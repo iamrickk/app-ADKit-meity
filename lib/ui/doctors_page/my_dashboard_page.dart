@@ -27,6 +27,74 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
     return snapshot.docs;
   }
 
+  void _showAddPatientAlert(BuildContext context, String profileid) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Remove Patient"),
+          content: const Text("Do you want to remove the patient?"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                // Add your logic for 'Yes' button press
+                Navigator.of(context).pop(); // Close the alert box
+                try {
+                  // Assuming you have the patient's document ID and doctor's ID
+                  // String patientDocId = "YOUR_PATIENT_DOCUMENT_ID";
+                  // String doctorId = "YOUR_DOCTOR_ID";
+                  print(profileid);
+                  print(widget.doctorId);
+                  // Get the reference to the user_list document
+                  QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+                      .collection('Doctors')
+                      .doc(widget.doctorId)
+                      .collection("User_list")
+                      .where('profile_id', isEqualTo: profileid)
+                      .get();
+
+                  print(userSnapshot);
+                  // Update the "status" field to "accepted"
+                  if (userSnapshot.docs.isNotEmpty) {
+                    // Update the "status" field to "accepted" for the first matching document
+                    DocumentReference userRef =
+                        userSnapshot.docs.first.reference;
+                    await userRef.update({"status": "pending"});
+                    if (kDebugMode) {
+                      print("Patient status updated to 'pending'");
+                    }
+                  } else {
+                    if (kDebugMode) {
+                      print(
+                          "No matching document found with the expected profile ID.");
+                    }
+                  }
+                } catch (e) {
+                  if (kDebugMode) {
+                    print("Error updating patient status: $e");
+                  }
+                }
+
+                // Add code to handle 'Yes' action
+                print("Patient will be added!");
+              },
+              child: const Text("Yes"),
+            ),
+            TextButton(
+              onPressed: () {
+                // Add your logic for 'No' button press
+                Navigator.of(context).pop(); // Close the alert box
+                // Add code to handle 'No' action
+                print("Canceled adding the patient.");
+              },
+              child: const Text("No"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   late Future<List<QueryDocumentSnapshot?>> docData;
   @override
   void initState() {
@@ -40,8 +108,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
       child: Scaffold(
         body: Column(
           children: [
-            const SizedBox(
-              height: 15.0,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * .02,
             ),
             Align(
               alignment: Alignment.center,
@@ -150,6 +218,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                                                   doctorData['profile_id'],
                                               name:
                                                   "${profileData?['first_name'] ?? ''}  ${profileData?['second_name'] ?? ''}",
+                                              dob: profileData?['dob'],
+                                              sex: profileData?['gender'],
                                             ),
                                           ));
                                     },
@@ -203,7 +273,10 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                                         iconSize:
                                             MediaQuery.of(context).size.height *
                                                 0.05,
-                                        onPressed: () {}),
+                                        onPressed: () {
+                                          _showAddPatientAlert(context,
+                                              doctorData['profile_id']);
+                                        }),
                                   );
                                   // return Column(
                                   //   crossAxisAlignment:

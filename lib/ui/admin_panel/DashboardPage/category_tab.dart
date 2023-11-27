@@ -1,11 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CategoryTab extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
   final imgPath, tabName, tabDesc, imgHeight, imgLeft, imgBottom;
   final Color? color;
   final AutoSizeGroup? titleGrp, descGrp;
+  final String? index, count;
   const CategoryTab(
       {super.key,
       this.imgPath,
@@ -16,13 +18,36 @@ class CategoryTab extends StatefulWidget {
       this.imgLeft = 15.0,
       this.imgBottom = -8.0,
       this.titleGrp,
-      this.descGrp});
+      this.descGrp,
+      this.index,
+      this.count});
 
   @override
   State<CategoryTab> createState() => _CategoryTabState();
 }
 
-class _CategoryTabState extends State<CategoryTab> {
+class _CategoryTabState extends State<CategoryTab>
+    with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Tween<double> _tween;
+  late Animation<double> _animation;
+  @override
+  void initState() {
+    super.initState();
+
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _tween = Tween(begin: 0.0, end: double.parse(widget.count!));
+    _animation = _tween.animate(_controller);
+
+    _controller.forward();
+  }
+
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -81,16 +106,31 @@ class _CategoryTabState extends State<CategoryTab> {
               ),
             ),
 
-            // Positioned(
-            //   left: widget.imgLeft,
-            //   bottom: widget.imgBottom,
-            //   child: SizedBox(
-            //     height: widget.imgHeight,
-            //     child: Hero(
-            //         tag: widget.imgPath,
-            //         child: Image(image: AssetImage(widget.imgPath))),
-            //   ),
-            // ),
+            Positioned(
+              left: MediaQuery.of(context).size.width * 0.1,
+              top: MediaQuery.of(context).size.height * 0.07,
+              // bottom: widget.imgBottom,
+              child: SizedBox(
+                // height: widget.imgHeight,
+                child: AnimatedBuilder(
+                  animation: _animation,
+                  builder: (context, child) {
+                    final value = _animation.value;
+                    return Text(
+                      value.toStringAsFixed(0),
+                      style: GoogleFonts.lato(
+                        textStyle: Theme.of(context).textTheme.displayLarge,
+                        fontSize: 35,
+                        fontWeight: FontWeight.w700,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 1.0,
+                        color: Colors.black,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),

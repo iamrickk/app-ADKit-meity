@@ -14,7 +14,7 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
-  final usernameController = TextEditingController();
+  final idController = TextEditingController();
   final passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -22,24 +22,22 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   void loginUser() async {
     try {
-      String email = usernameController.text.trim();
+      String id = idController.text.trim();
       String password = passwordController.text.trim();
 
-      if (email.isNotEmpty && password.isNotEmpty) {
+      if (id.isNotEmpty && password.isNotEmpty) {
         // Check if an admin with the entered credentials exists in the Firestore collection
         QuerySnapshot adminSnapshot = await _firestore
             .collection('admin')
-            .where('username', isEqualTo: email)
+            .where('username', isEqualTo: id)
             .where('password', isEqualTo: password)
             .get();
 
+        print(adminSnapshot.docs);
         if (adminSnapshot.docs.isNotEmpty) {
           // Admin with the entered credentials found
-          UserCredential userCredential =
-              await _auth.signInWithEmailAndPassword(
-            email: email,
-            password: password,
-          );
+          UserCredential userCredential = await _auth
+              .signInWithEmailAndPassword(email: id, password: password);
 
           // Check if the user is an admin (you may have a specific admin role in your Firestore)
           // For simplicity, this example assumes that all users are admins
@@ -166,7 +164,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                               ),
                             ),
                             child: TextField(
-                              controller: usernameController,
+                              controller: idController,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Username",
@@ -209,10 +207,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           child: Center(
                             child: IconButton(
                               onPressed: () {
-                                if (usernameController.text.isNotEmpty &&
+                                if (idController.text.isNotEmpty &&
                                     passwordController.text.isNotEmpty) {
                                   loginUser();
-                                  print(usernameController.text);
+                                  print(idController.text);
                                   print(passwordController.text);
                                   setState(() {
                                     isFull = true;

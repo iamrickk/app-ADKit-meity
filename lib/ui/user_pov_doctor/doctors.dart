@@ -32,8 +32,11 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
   }
 
   Future<void> fetchDoctors() async {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection("Doctors").get();
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection("Doctors")
+        .where("pending", isEqualTo: false)
+        .get();
+
     setState(() {
       originalDoctorList = snapshot.docs;
       filteredList = List.from(originalDoctorList);
@@ -43,6 +46,8 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
   void filterDoctors() {
     String name = nameController.text.toLowerCase();
     String pin = pinController.text;
+    String phone = phoneController.text;
+    String district = districtController.text;
     print("Hello");
     print(pinController.text);
 
@@ -51,7 +56,9 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
         var data = doctor.data() as Map<String, dynamic>;
         print(data);
         return data['firstname'].toString().toLowerCase().contains(name) &&
-            data['pin'].toString().contains(pin);
+            data['pin'].toString().contains(pin) &&
+            data['phoneNumber'].toString().toLowerCase().contains(phone) &&
+            data['district'].toString().toLowerCase().contains(district);
       }).toList();
     });
   }
@@ -368,7 +375,7 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                                     },
                                     icon: const Icon(
                                         CupertinoIcons.checkmark_alt),
-                                    color: Colors.white,
+                                    color: Colors.blue,
                                   ),
                                 ),
                               ));

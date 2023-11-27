@@ -16,8 +16,10 @@ class VerifiedDocPage extends StatefulWidget {
 
 class _VerifiedDocPageState extends State<VerifiedDocPage> {
   Future<List<QueryDocumentSnapshot>> fetchDoctors() async {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection("Doctors").get();
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection("Doctors")
+        .where("pending", isEqualTo: false)
+        .get();
     return snapshot.docs;
   }
 
@@ -90,6 +92,9 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                                         phoneNumber: doctorData["phoneNumber"],
                                         address: doctorData['address'],
                                         email: doctorData['email'],
+                                        pin: doctorData['pin'],
+                                        state: doctorData['state'],
+                                        city: doctorData['district'],
                                       ),
                                     ),
                                   );
@@ -153,8 +158,9 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                                               }
                                             },
                                             child: CircleAvatar(
-                                              backgroundColor:
-                                                  Theme.of(context).colorScheme.secondary,
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               child: const Icon(
                                                 Icons.call,
                                                 color: Color(0xFFBF828A),
@@ -169,8 +175,9 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                                                   doctorData["address"] ?? "");
                                             },
                                             child: CircleAvatar(
-                                              backgroundColor:
-                                                  Theme.of(context).colorScheme.secondary,
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               child: const Icon(
                                                 Icons.location_pin,
                                                 color: Color(0xFFBF828A),
@@ -194,8 +201,9 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                                               final Uri emailUri = Uri(
                                                 scheme: 'mailto',
                                                 path: doctorData["email"] ?? "",
-                                                query: encodeQueryParameters(<
-                                                    String, String>{
+                                                query:
+                                                    encodeQueryParameters(<String,
+                                                        String>{
                                                   'subject':
                                                       'Example Subject & Symbols are allowed!',
                                                   'body': 'Your Message!',
@@ -208,8 +216,9 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                                               }
                                             },
                                             child: CircleAvatar(
-                                              backgroundColor:
-                                                  Theme.of(context).colorScheme.secondary,
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               child: const Icon(
                                                 Icons.email,
                                                 color: Color(0xFFBF828A),
@@ -224,6 +233,45 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                                   child: IconButton(
                                     onPressed: () {
                                       // send request wala part and notifications
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text(
+                                              'Confirm Remove Doctor'),
+                                          content: const Text(
+                                              'Are you sure you want to Remove this doctor?'),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('Cancel'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: const Text('Remove'),
+                                              onPressed: () async {
+                                                // Update the pending field of the doctor to false
+                                                await FirebaseFirestore.instance
+                                                    .collection("Doctors")
+                                                    .doc(doctorData['uid'])
+                                                    .update({"pending": true});
+
+                                                // Show a success snackbar
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                        'Doctor added successfully.'),
+                                                  ),
+                                                );
+
+                                                // Refresh the list view to reflect the updated data
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      );
                                     },
                                     icon: const Icon(
                                         CupertinoIcons.checkmark_alt),

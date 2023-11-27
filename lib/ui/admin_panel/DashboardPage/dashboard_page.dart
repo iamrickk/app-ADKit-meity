@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,7 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
       "imgHeight": 150.0,
       "imgPath": "assets/verified.jpg",
       "tabName": "Total Pending Request",
-      "tabDesc": "Top covid-19 symptoms",
+      "tabDesc": "Total Count of Pending Doctors",
       "color": Colors.teal[800],
     },
     {
@@ -40,66 +41,112 @@ class _DashboardPageState extends State<DashboardPage> {
       "imgLeft": 15.0,
       "imgBottom": 0.0,
       "tabName": "Total Patients Count",
-      "tabDesc": "How to prevent being a victim",
+      "tabDesc": "Total Patients Registered",
       "color": Colors.lightBlue[700],
     },
   ];
+  List<String> value = [];
+  int pendingDoctorCount = 0;
+  int nonPendingDoctorCount = 0;
+  int userCount = 0;
+  @override
+  void initState() {
+    super.initState();
+    countPendingAndNonPendingDoctors();
+  }
+
+  Future<void> countPendingAndNonPendingDoctors() async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final CollectionReference doctorsRef = firestore.collection('Doctors');
+    final CollectionReference userRef = firestore.collection("users");
+
+    // Count pending doctors
+    final pendingDoctorsQuery = doctorsRef.where('pending', isEqualTo: true);
+    final pendingDoctorsSnapshot = await pendingDoctorsQuery.get();
+    pendingDoctorCount = pendingDoctorsSnapshot.size;
+    value.add(pendingDoctorCount.toString());
+
+    // Count non-pending doctors
+    final nonPendingDoctorsQuery =
+        doctorsRef.where('pending', isEqualTo: false);
+    final nonPendingDoctorsSnapshot = await nonPendingDoctorsQuery.get();
+    nonPendingDoctorCount = nonPendingDoctorsSnapshot.size;
+    value.add(nonPendingDoctorCount.toString());
+    print(nonPendingDoctorCount);
+
+    final countUserSnapshot = await userRef.get();
+    userCount = countUserSnapshot.size;
+    value.add(userCount.toString());
+
+    // value.add("Rick");
+    setState(() {}); // Update the UI
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(5.0, 0.0, 2.0, 4.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.32),
-                    Text(
-                      "Dashboard",
-                      style: GoogleFonts.lato(
-                        textStyle: Theme.of(context).textTheme.displayLarge,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        fontStyle: FontStyle.normal,
-                        color: Colors.blue,
-                        // letterSpacing: 2.0,
+    return value.length != 3
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : SafeArea(
+            child: Scaffold(
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(5.0, 0.0, 2.0, 4.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.32),
+                          Text(
+                            "Dashboard",
+                            style: GoogleFonts.lato(
+                              textStyle:
+                                  Theme.of(context).textTheme.displayLarge,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal,
+                              color: Colors.blue,
+                              // letterSpacing: 2.0,
+                            ),
+                          ),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.2),
+                          IconButton(
+                            onPressed: () {},
+                            color: Colors.blue,
+                            icon: const Icon(CupertinoIcons.bell),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.2),
-                    IconButton(
-                      onPressed: () {},
-                      color: Colors.blue,
-                      icon: const Icon(CupertinoIcons.bell),
-                    ),
-                  ],
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 3,
+                        itemBuilder: (BuildContext context, int index) {
+                          var cat = categoryData[index];
+                          return CategoryTab(
+                            titleGrp: titleGrp,
+                            descGrp: descGrp,
+                            imgPath: cat["imgPath"],
+                            imgBottom: cat["imgBottom"],
+                            imgHeight: cat["imgHeight"],
+                            imgLeft: cat["imgLeft"],
+                            tabDesc: cat["tabDesc"],
+                            tabName: cat["tabName"],
+                            color: cat["color"],
+                            // index : index,
+                            count: value[index],
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 3,
-                  itemBuilder: (BuildContext context, int index) {
-                    var cat = categoryData[index];
-                    return CategoryTab(
-                      titleGrp: titleGrp,
-                      descGrp: descGrp,
-                      imgPath: cat["imgPath"],
-                      imgBottom: cat["imgBottom"],
-                      imgHeight: cat["imgHeight"],
-                      imgLeft: cat["imgLeft"],
-                      tabDesc: cat["tabDesc"],
-                      tabName: cat["tabName"],
-                      color: cat["color"],
-                    );
-                  },
-                )
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

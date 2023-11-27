@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thefirstone/resources/auth_provider.dart';
 import 'package:thefirstone/ui/admin_panel/LogInPage/log_in_page.dart';
-import 'package:thefirstone/ui/doctors_page/doctors_information_page.dart';
+// import 'package:thefirstone/ui/doctors_page/doctors_information_page.dart';
 import 'package:thefirstone/ui/doctors_page/doctors_register_page.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/profiles.dart';
@@ -64,6 +64,7 @@ class _options_pageState extends State<options_page> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         elevation: 8, // Adjust the elevation as needed
+                        backgroundColor: Colors.blue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                               30.0), // Adjust the border radius as needed
@@ -95,6 +96,8 @@ class _options_pageState extends State<options_page> {
                     height: MediaQuery.of(context).size.height * 0.05,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+
                         elevation: 8, // Adjust the elevation as needed
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
@@ -127,6 +130,8 @@ class _options_pageState extends State<options_page> {
                     height: MediaQuery.of(context).size.height * 0.05,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+
                         elevation: 8, // Adjust the elevation as needed
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
