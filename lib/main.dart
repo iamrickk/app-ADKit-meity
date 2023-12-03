@@ -12,6 +12,7 @@ import 'package:thefirstone/resources/auth_provider.dart';
 import 'package:thefirstone/resources/language_model.dart';
 import 'package:thefirstone/ui/splash.dart';
 import 'l10n/l10n.dart';
+import 'ui/api/firebase_api.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
@@ -19,6 +20,7 @@ void main() async {
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => LanguageModel()),
@@ -51,7 +53,8 @@ class _MyAppState extends State<MyApp> {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
       Permission.camera,
-      Permission.microphone
+      Permission.microphone,
+      Permission.notification
     ].request();
 
     final info = statuses[Permission.storage].toString();

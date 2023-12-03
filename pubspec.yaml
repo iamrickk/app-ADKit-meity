@@ -82,6 +82,7 @@ dependencies:
   autocompeletetxtfield: ^1.1.0
   autocomplete_textfield: ^2.0.1
   csc_picker: ^0.2.7
+  firebase_messaging: ^14.7.6
   #flutter_svg: ^2.0.5
 
 dev_dependencies:
