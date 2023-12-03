@@ -28,7 +28,7 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
   @override
   void initState() {
     super.initState();
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
 
     // Initialize controllers with actual values
     firstNameController = TextEditingController(text: ap.doctorModel.firstname);
@@ -44,7 +44,7 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
   }
 
   Future<void> updateDoctorInfo() async {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     try {
@@ -107,7 +107,7 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
 
     return SafeArea(
       child: Scaffold(

@@ -33,7 +33,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading =
-        Provider.of<AuthProvider>(context, listen: true).isLoading;
+        Provider.of<FirebaseAuthProvider>(context, listen: true).isLoading;
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
@@ -205,7 +205,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   // verify otp
   void verifyOtp(BuildContext context, String userOtp) {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
     ap.verifyOtp(
       context: context,
       verificationId: widget.verificationId,

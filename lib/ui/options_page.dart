@@ -34,7 +34,7 @@ class _options_pageState extends State<options_page> {
 
   @override
   Widget build(BuildContext context) {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         body: Stack(

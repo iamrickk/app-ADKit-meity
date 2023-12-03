@@ -86,7 +86,7 @@ class _doctorsInformationState extends State<doctorsInformation> {
   @override
   Widget build(BuildContext context) {
     final isLoading =
-        Provider.of<AuthProvider>(context, listen: true).isLoading;
+        Provider.of<FirebaseAuthProvider>(context, listen: true).isLoading;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -444,7 +444,7 @@ class _doctorsInformationState extends State<doctorsInformation> {
 
   // store the user data to database
   void storeData() async {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
     // Check if any of the fields is empty
     if (nameFirstController.text.isEmpty ||
         nameSecondController.text.isEmpty ||

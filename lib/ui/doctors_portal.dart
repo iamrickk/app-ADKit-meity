@@ -179,7 +179,7 @@ class _doctors_portalState extends State<doctors_portal> {
 
   @override
   Widget build(BuildContext context) {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
 
     final defaultPinTheme = PinTheme(
       width: 56,

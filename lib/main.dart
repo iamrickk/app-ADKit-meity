@@ -22,7 +22,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => LanguageModel()),
-      ChangeNotifierProvider(create: (context) => AuthProvider()),
+      ChangeNotifierProvider(create: (context) => FirebaseAuthProvider()),
     ],
     child: MyApp(),
   ));
@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Example Dialogflow Flutter',
+      title: 'ADKit',
       theme: ThemeData(
         primaryColor: Colors.white,
         // accentColor: Color(0xFFFCF0E7),

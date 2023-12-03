@@ -15,7 +15,7 @@ class DoctorProfile extends StatefulWidget {
 class _DoctorProfileState extends State<DoctorProfile> {
   @override
   Widget build(BuildContext context) {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(

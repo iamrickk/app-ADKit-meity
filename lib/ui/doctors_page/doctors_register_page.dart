@@ -222,7 +222,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void sendPhoneNumber() {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
     String phoneNo = phoneNumber.text.trim();
     ap.signInWithPhone(context, "+${country.phoneCode}$phoneNo");
   }
