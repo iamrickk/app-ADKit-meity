@@ -5,15 +5,15 @@ FROM python:3.8
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-WORKDIR /app
+COPY requirements.txt /
 
-COPY requirements.txt /app/
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 libgl1 -y
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3.8 install --no-cache-dir -r requirements.txt
 
-COPY ./ADKit /app/
+COPY ./ADKit /
 
 EXPOSE 8000
 
 # Run Django app
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python3.8", "manage.py", "runserver", "0.0.0.0:8000"]
