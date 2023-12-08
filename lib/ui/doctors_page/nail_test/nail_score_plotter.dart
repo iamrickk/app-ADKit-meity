@@ -69,7 +69,7 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ),
@@ -86,7 +86,6 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
                 return const Center(child: Text('No scores available.'));
               } else {
                 sortedDates = getSortedDates(snapshot.data!);
-
                 return Column(
                   children: [
                     const Text(
@@ -97,36 +96,13 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
                         color: Colors.black,
                       ),
                     ),
+                    const Padding(
+                      padding: EdgeInsets.all(22.0),
+                    ),
                     SizedBox(
                       height: 80,
                       child: Column(
                         children: [
-                          // Expanded(
-                          //   child: SizedBox(
-                          //     height: 50,
-                          //     child: ListView.builder(
-                          //       scrollDirection: Axis.horizontal,
-                          //       itemCount: sortedDates.length,
-                          //       itemBuilder: (context, index) {
-                          //         return Container(
-                          //           width: 100,
-                          //           alignment: Alignment.center,
-                          //           child: Text(
-                          //             DateFormat('dd/MM/yyyy')
-                          //                 .format(sortedDates[index]),
-                          //             style: const TextStyle(
-                          //               fontSize: 14,
-                          //               color: Colors.blue,
-                          //             ),
-                          //           ),
-                          //         );
-                          //       },
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * 0.0,
-                          // ),
                           Slider(
                             value: sliderValue,
                             onChanged: (value) {
@@ -155,7 +131,7 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Colors.blue,
+                              color: Colors.blueGrey,
                             ),
                           ),
                         ],
