@@ -140,6 +140,17 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.1,
                     ),
+                    const Text(
+                      "Graph Plot",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(25.0),
+                    ),
                     AspectRatio(
                       aspectRatio: 2,
                       child: LineChart(
