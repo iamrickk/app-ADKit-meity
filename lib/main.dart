@@ -13,7 +13,10 @@ import 'package:thefirstone/resources/language_model.dart';
 import 'package:thefirstone/ui/splash.dart';
 import 'l10n/l10n.dart';
 import 'ui/api/firebase_api.dart';
+import 'ui/sample_pages/notification_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
@@ -86,8 +89,12 @@ class _MyAppState extends State<MyApp> {
                   const Color(0xFFFCF0E7), // Set your custom accent color here
             ),
       ),
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       home: const splash_screen(),
+      routes: {
+        NotificationScreen.route: (context) => const NotificationScreen()
+      },
       locale: Locale(Provider.of<LanguageModel>(context).currentLocale),
       supportedLocales: L10n.all,
       localizationsDelegates: const [
