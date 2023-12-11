@@ -444,7 +444,7 @@ class _HomePageState extends State<HomePage> {
                 Center(
                   child: SizedBox(
                     width: 200,
-                    height: 200,
+                    height: 200, // Mediaquery.of(context).size.height 
                     child: SfRadialGauge(
                       axes: <RadialAxis>[
                         RadialAxis(
