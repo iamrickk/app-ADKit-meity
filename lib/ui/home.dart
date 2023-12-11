@@ -16,6 +16,7 @@ import 'package:thefirstone/ui/language_select.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/nearby_hospital_google_map_in.dart';
 import 'package:thefirstone/ui/requested_doctor/requested_doctor.dart';
+import 'package:thefirstone/ui/trend_graph.dart';
 // import 'package:thefirstone/ui/trend_graph.dart';
 import 'package:thefirstone/ui/user_pov_doctor/doctors.dart';
 import 'package:thefirstone/utils/MapUtils.dart';
@@ -851,7 +852,7 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => const requestedDocPage()),
+                                          builder: (context) => const TrendGraph()),
                                     );
                                   },
                                   child: Card(
