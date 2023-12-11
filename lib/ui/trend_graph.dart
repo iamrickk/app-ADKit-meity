@@ -3,21 +3,21 @@
 // import 'package:fl_chart/fl_chart.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+//
 // import '../resources/api.dart';
-
+//
 // class TrendGraph extends StatefulWidget {
 //   @override
 //   _TrendGraphState createState() => _TrendGraphState();
 // }
-
+//
 // class _TrendGraphState extends State<TrendGraph> {
 //   // List<Color> gradientColors = [
 //   //   const Color(0xff23b6e6),
 //   //   const Color(0xff02d39a),
 //   // ];
 //   DocumentSnapshot? userData;
-
+//
 //   @override
 //   void initState() {
 //     // FirebaseFirestore.instance
@@ -32,16 +32,14 @@
 //     userData = API.profileData;
 //     super.initState();
 //   }
-
+//
 //   int _calcAge(String dob) {
 //     DateTime dt = DateTime.parse(dob);
 //     Duration diff = DateTime.now().difference(dt);
-
 //     int age = (diff.inDays / 365).floor();
-
 //     return age;
 //   }
-
+//
 //   List<FlSpot> _normalRange(int age) {
 //     double normalVal;
 //     if (age <= 5) {
@@ -57,10 +55,9 @@
 //         normalVal = 13;
 //       }
 //     }
-
 //     return [FlSpot(1, normalVal), FlSpot(12, normalVal)];
 //   }
-
+//
 //   @override
 //   Widget build(BuildContext context) {
 //     return SafeArea(
@@ -142,7 +139,7 @@
 //       ),
 //     );
 //   }
-
+//
 //   LineChartData mainData(List<dynamic> plotData) {
 //     return LineChartData(
 //       axisTitleData: FlAxisTitleData(
@@ -157,7 +154,7 @@
 //           titleText: AppLocalizations.of(context)!.month,
 //           textStyle: const TextStyle(fontSize: 16.0, color: Colors.black),
 //         ),
-     
+//
 //       ),
 //       gridData: FlGridData(
 //         show: true,

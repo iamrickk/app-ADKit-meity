@@ -13,7 +13,7 @@ import 'package:thefirstone/utils/snakcbar.dart';
 import '../model/doctorModel.dart';
 import '../ui/doctors_page/doctors_otp_screen.dart';
 
-class AuthProvider extends ChangeNotifier {
+class FirebaseAuthProvider extends ChangeNotifier {
   bool _isSignedIn = false;
   bool get isSignedIn => _isSignedIn;
   bool _isloading = false;
@@ -26,7 +26,7 @@ class AuthProvider extends ChangeNotifier {
   DoctorModel? _doctorModel;
   DoctorModel get doctorModel => _doctorModel!;
 
-  AuthProvider() {
+  FirebaseAuthProvider() {
     checkSignIn();
   }
 

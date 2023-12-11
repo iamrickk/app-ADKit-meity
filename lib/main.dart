@@ -12,17 +12,22 @@ import 'package:thefirstone/resources/auth_provider.dart';
 import 'package:thefirstone/resources/language_model.dart';
 import 'package:thefirstone/ui/splash.dart';
 import 'l10n/l10n.dart';
+import 'ui/api/firebase_api.dart';
+import 'ui/sample_pages/notification_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => LanguageModel()),
-      ChangeNotifierProvider(create: (context) => AuthProvider()),
+      ChangeNotifierProvider(create: (context) => FirebaseAuthProvider()),
     ],
     child: MyApp(),
   ));
@@ -51,7 +56,8 @@ class _MyAppState extends State<MyApp> {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
       Permission.camera,
-      Permission.microphone
+      Permission.microphone,
+      Permission.notification
     ].request();
 
     final info = statuses[Permission.storage].toString();
@@ -74,7 +80,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Example Dialogflow Flutter',
+      title: 'ADKit',
       theme: ThemeData(
         primaryColor: Colors.white,
         // accentColor: Color(0xFFFCF0E7),
@@ -83,8 +89,12 @@ class _MyAppState extends State<MyApp> {
                   const Color(0xFFFCF0E7), // Set your custom accent color here
             ),
       ),
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       home: const splash_screen(),
+      routes: {
+        NotificationScreen.route: (context) => const NotificationScreen()
+      },
       locale: Locale(Provider.of<LanguageModel>(context).currentLocale),
       supportedLocales: L10n.all,
       localizationsDelegates: const [

@@ -80,7 +80,7 @@ class _TestPageState extends State<TestPage> {
 
   late Future<List<QueryDocumentSnapshot?>> docData;
   late Future<List<QueryDocumentSnapshot?>> docData1;
-  late AuthProvider ap;
+  late FirebaseAuthProvider ap;
 
   List<int> value = [0];
   var values;
@@ -94,7 +94,7 @@ class _TestPageState extends State<TestPage> {
         _currentPage = _pageController.page?.round() ?? 0;
       });
     });
-    ap = Provider.of<AuthProvider>(context, listen: false);
+    ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
     docId = ap.doctorModel.uid;
     docData = fetchUsers();
     docData1 = fetchUsers1();
