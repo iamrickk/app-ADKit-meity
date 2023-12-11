@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:keep_screen_on/keep_screen_on.dart';
+// import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -75,13 +76,18 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
       //   pending: ap.doctorModel.pending,
       //   uid : ap.doctorModel
       //   // Update other fields as needed
+      
       // );
 
       // Show a success message or perform other actions after successful update
-      print('Doctor information updated successfully!');
+      if (kDebugMode) {
+        print('Doctor information updated successfully!');
+      }
     } catch (e) {
       // Handle errors, show an error message, or log the error
-      print('Error updating doctor information: $e');
+      if (kDebugMode) {
+        print('Error updating doctor information: $e');
+      }
     }
   }
 
