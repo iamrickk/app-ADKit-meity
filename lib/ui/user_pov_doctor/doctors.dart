@@ -3,9 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:thefirstone/ui/user_pov_doctor/doctor_profile_view_page.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VerifiedDocPage extends StatefulWidget {
   const VerifiedDocPage({Key? key}) : super(key: key);
@@ -80,7 +81,8 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                 ),
                 Center(
                   child: Text(
-                    "Verified Doctors",
+                    AppLocalizations.of(context)!.showDoctors,
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
                       textStyle: Theme.of(context).textTheme.displayLarge,
                       fontSize: 20,
@@ -105,18 +107,18 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
             SizedBox(
               height: MediaQuery.of(context).size.width * 0.05,
             ),
-            Center(
-              child: Text(
-                "Filter Your Search",
-                style: GoogleFonts.lato(
-                  textStyle: Theme.of(context).textTheme.displayLarge,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
-                  color: Colors.blue,
-                ),
-              ),
-            ),
+            // Center(
+            //   child: Text(
+            //     "Filter Your Search",
+            //     style: GoogleFonts.lato(
+            //       textStyle: Theme.of(context).textTheme.displayLarge,
+            //       fontSize: 15,
+            //       fontWeight: FontWeight.w600,
+            //       fontStyle: FontStyle.normal,
+            //       color: Colors.blue,
+            //     ),
+            //   ),
+            // ),
             // const SizedBox(
             //   height: 20.0,
             // ),

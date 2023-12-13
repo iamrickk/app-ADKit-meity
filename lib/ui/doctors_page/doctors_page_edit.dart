@@ -44,11 +44,67 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
     districtController = TextEditingController(text: ap.doctorModel.district);
   }
 
+  // Future<void> updateDoctorInfo() async {
+  //   final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
+  //   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // try {
+  //   await _firestore.collection('Doctors').doc(ap.doctorModel.uid).update({
+  //     'firstname': firstNameController.text,
+  //     'secondname': secondNameController.text,
+  //     'email': emailController.text,
+  //     'speciality': specialityController.text,
+  //     'address': addressController.text,
+  //     'state': stateController.text,
+  //     'pin': pinCodeController.text,
+  //     'district': districtController.text,
+  //     if (pickedImage != null) 'profilePic': pickedImage?.path,
+  //     // Add other fields as needed
+  //   });
+
+  //   // Update local doctorModel in AuthProvider
+  //   // ap.updateDoctorModel(
+  //   //   firstname: firstNameController.text,
+  //   //   secondname: secondNameController.text,
+  //   //   email: emailController.text,
+  //   //   speciality: specialityController.text,
+  //   //   address: addressController.text,
+  //   //   state: stateController.text,
+  //   //   pin: pinCodeController.text,
+  //   //   district: districtController.text,
+  //   //   phoneNumber : ap.doctorModel.phoneNumber,
+  //   //   pending: ap.doctorModel.pending,
+  //   //   uid : ap.doctorModel
+  //   //   // Update other fields as needed
+
+  //   // );
+
+  //   // Show a success message or perform other actions after successful update
+  //   if (kDebugMode) {
+  //     print('Doctor information updated successfully!');
+  //   }
+  // } catch (e) {
+  //   // Handle errors, show an error message, or log the error
+  //   if (kDebugMode) {
+  //     print('Error updating doctor information: $e');
+  //   }
+  // }
   Future<void> updateDoctorInfo() async {
     final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     try {
+      String? imageUrl;
+
+      // Check if a new image is selected
+      if (pickedImage != null) {
+        // Upload the image to Firebase Storage
+        imageUrl = await ap.storeFielToStorage(
+          "profilePic/${ap.doctorModel.uid}",
+          pickedImage!,
+        );
+      }
+
       await _firestore.collection('Doctors').doc(ap.doctorModel.uid).update({
         'firstname': firstNameController.text,
         'secondname': secondNameController.text,
@@ -58,26 +114,23 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
         'state': stateController.text,
         'pin': pinCodeController.text,
         'district': districtController.text,
-        if (pickedImage != null) 'profilePic': pickedImage?.path,
+        if (imageUrl != null) 'profilePic': imageUrl,
         // Add other fields as needed
       });
 
       // Update local doctorModel in AuthProvider
-      // ap.updateDoctorModel(
-      //   firstname: firstNameController.text,
-      //   secondname: secondNameController.text,
-      //   email: emailController.text,
-      //   speciality: specialityController.text,
-      //   address: addressController.text,
-      //   state: stateController.text,
-      //   pin: pinCodeController.text,
-      //   district: districtController.text,
-      //   phoneNumber : ap.doctorModel.phoneNumber,
-      //   pending: ap.doctorModel.pending,
-      //   uid : ap.doctorModel
-      //   // Update other fields as needed
-      
-      // );
+      ap.updateDoctorModel(
+        firstname: firstNameController.text,
+        secondname: secondNameController.text,
+        email: emailController.text,
+        speciality: specialityController.text,
+        address: addressController.text,
+        state: stateController.text,
+        pin: pinCodeController.text,
+        district: districtController.text,
+        profilePic: imageUrl ?? ap.doctorModel.profilePic,
+        // Update other fields as needed
+      );
 
       // Show a success message or perform other actions after successful update
       if (kDebugMode) {
@@ -90,6 +143,7 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
       }
     }
   }
+  // }
 
   Future<void> pickImage(BuildContext context) async {
     try {
@@ -332,6 +386,19 @@ class _DoctorsPageEditState extends State<DoctorsPageEdit> {
                                             // Call your submit function here
                                             // Example: submitForm();
                                             updateDoctorInfo();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content: Row(
+                                                children: [
+                                                  Icon(Icons.done,
+                                                      color: Colors.white),
+                                                  SizedBox(width: 8.0),
+                                                  Text(
+                                                      'Details updated successfully!'),
+                                                ],
+                                              ),
+                                              duration: Duration(seconds: 2),
+                                            ));
                                           }
                                         },
                                         icon: const Icon(

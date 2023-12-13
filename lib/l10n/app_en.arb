@@ -215,5 +215,9 @@
     "nearbyHospitals": "Nearby Hospitals",
     "@nearbyHospitals": {
         "description": "Screen Title"
+    },
+    "requestDoctor": "Requested Doctors",
+     "@requestDoctor": {
+        "description": "Message to show requested Doctor"
     }
 }

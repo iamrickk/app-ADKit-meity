@@ -1,8 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:thefirstone/ui/options_page.dart';
 
 import 'category_tab.dart';
 
@@ -99,7 +101,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.32),
+                              width: MediaQuery.of(context).size.width * 0.31),
                           Text(
                             "Dashboard",
                             style: GoogleFonts.lato(
@@ -113,11 +115,25 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ),
                           SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.2),
+                              width: MediaQuery.of(context).size.width * 0.05),
                           IconButton(
                             onPressed: () {},
                             color: Colors.blue,
                             icon: const Icon(CupertinoIcons.bell),
+                          ),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.02),
+                          IconButton(
+                            onPressed: () async {
+                              await FirebaseAuth.instance.signOut();
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => options_page(),
+                                  ));
+                            },
+                            color: Colors.blue,
+                            icon: const Icon(CupertinoIcons.arrow_right_square),
                           ),
                         ],
                       ),

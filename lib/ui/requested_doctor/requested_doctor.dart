@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../resources/api.dart';
 
@@ -92,7 +93,8 @@ class _requestedDocPageState extends State<requestedDocPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                "Requested Doctors",
+                AppLocalizations.of(context)!.requestDoctor,
+                textAlign: TextAlign.center,
                 style: GoogleFonts.lato(
                   textStyle: Theme.of(context).textTheme.displayLarge,
                   fontSize: 20,

@@ -292,8 +292,29 @@ class _FirestoreFormState extends State<FirestoreForm> {
     // );
   }
 
-  int v = 0;
+  // int v = 0;
 
+  // Widget getSubQuestionsView() {
+  //   int id = selectedSymToTravarse[state - 1]['groups'][subState];
+  //   var subQuestion;
+  //   String question = selectedSymToTravarse[state - 1]['name'];
+
+  //   for (int i = 0; i < subQuestions.length; i++) {
+  //     if (subQuestions[i]['id'] == id) {
+  //       subQuestion = subQuestions[i];
+  //       break;
+  //     }
+  //   }
+  //   v = ansMap["$question-$id"];
+  //   print(v);
+  //   v == null ? v = 0 : v = ansMap["$question-$id"];
+  //   ansMap["$question-$id"] = v;
+
+  //   List options = subQuestion['options'];
+
+  int? v; // Declare v as int? (nullable integer)
+
+// Inside the getSubQuestionsView method
   Widget getSubQuestionsView() {
     int id = selectedSymToTravarse[state - 1]['groups'][subState];
     var subQuestion;
@@ -305,8 +326,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
         break;
       }
     }
-    v = ansMap["$question-$id"];
-    print(v);
+
     v == null ? v = 0 : v = ansMap["$question-$id"];
     ansMap["$question-$id"] = v;
 
@@ -358,10 +378,15 @@ class _FirestoreFormState extends State<FirestoreForm> {
                     onTap: () {
                       setState(() {
                         v = i;
+
                         ansMap["$question-$id"] = i;
-                        print('$question-$id');
+                        // Save main and subquestion responses to Firestore
+                        API.saveSubQuestionResponse(
+                            question, subQuestion['name'], id, i);
+                        print('$question-$id') ;
                         print(ansMap["$question-$id"]);
                         print(ansMap);
+                        print("i am here");
                       });
                     },
                     child: Card(
@@ -380,7 +405,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                             onChanged: (int? value) {
                               setState(() {
                                 ansMap["$question-$id"] = value;
-                                v = value!;
+                                v = value;
                               });
                             },
                             activeColor: const Color(0xFFBF828A),
@@ -499,8 +524,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                               value: dropdownValue,
                               icon: const Icon(Icons.arrow_downward),
                               elevation: 16,
-                              style: const TextStyle(
-                                  color:  Color(0xFFBF828A)),
+                              style: const TextStyle(color: Color(0xFFBF828A)),
                               underline: Container(
                                 height: 2,
                                 color: const Color(0xFFBF828A),

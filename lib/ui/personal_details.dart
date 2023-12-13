@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class PersonalDetails extends StatefulWidget {
   @override
@@ -35,24 +35,35 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   }
 
   void createRecord(String fn, String sn, String dob) async {
-    String genderVal = "";
+    // Retrieve the current user's phone number from Firebase Authentication
+    String? phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
 
-    for (var mp in genderList) {
-      if (mp['key'] == dropdownValue) {
-        genderVal = mp['value']!;
+    if (phoneNumber != null) {
+      String genderVal = "";
+
+      for (var mp in genderList) {
+        if (mp['key'] == dropdownValue) {
+          genderVal = mp['value']!;
+        }
+      }
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("profiles")
+          .add({
+        'first_name': fn,
+        'second_name': sn,
+        'dob': dob,
+        'gender': genderVal,
+        'phone_number': phoneNumber, // Add the phone number to the document
+      }).then((value) => after());
+    } else {
+      // Handle the case where the phone number is not available
+      if (kDebugMode) {
+        print('Phone number not available');
       }
     }
-
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("profiles")
-        .add({
-      'first_name': fn,
-      'second_name': sn,
-      'dob': dob,
-      'gender': genderVal
-    }).then((value) => {after()});
   }
 
   void _selectDate(BuildContext context) async {
@@ -122,7 +133,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
                       child: TextField(
                         cursorColor: Colors.black,
-                        style: const TextStyle(fontSize: 18.0, color: Colors.black),
+                        style: const TextStyle(
+                            fontSize: 18.0, color: Colors.black),
                         keyboardType: TextInputType.name,
                         controller: _firstnameController,
                         decoration: InputDecoration(
@@ -132,8 +144,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.0))),
                           labelText: AppLocalizations.of(context)!.firstName,
-                          labelStyle:
-                              const TextStyle(fontSize: 16.0, color: Colors.black),
+                          labelStyle: const TextStyle(
+                              fontSize: 16.0, color: Colors.black),
                           prefixIcon: const Icon(
                             Icons.person,
                             color: Colors.black,
@@ -145,7 +157,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                       child: TextField(
                         cursorColor: Colors.black,
-                        style: const TextStyle(fontSize: 18.0, color: Colors.black),
+                        style: const TextStyle(
+                            fontSize: 18.0, color: Colors.black),
                         keyboardType: TextInputType.name,
                         controller: _secondnameController,
                         decoration: InputDecoration(
@@ -155,8 +168,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.0))),
                           labelText: AppLocalizations.of(context)!.lastName,
-                          labelStyle:
-                              const TextStyle(fontSize: 16.0, color: Colors.black),
+                          labelStyle: const TextStyle(
+                              fontSize: 16.0, color: Colors.black),
                           prefixIcon: const Icon(
                             Icons.person,
                             color: Colors.black,
@@ -218,7 +231,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             child: const Padding(
-                              padding:  EdgeInsets.all(5.0),
+                              padding: EdgeInsets.all(5.0),
                               child: Icon(
                                 Icons.date_range,
                                 size: 30.0,

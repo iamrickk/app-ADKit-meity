@@ -179,6 +179,37 @@ class FirebaseAuthProvider extends ChangeNotifier {
 
   return _doctorModel!;
 }
+ void updateDoctorModel({
+    required String firstname,
+    required String secondname,
+    required String email,
+    required String speciality,
+    required String address,
+    required String state,
+    required String pin,
+    required String district,
+    required String profilePic,
+    // Add other fields as needed
+  }) {
+    _doctorModel = DoctorModel(
+      firstname: firstname,
+      secondname: secondname,
+      email: email,
+      speciality: speciality,
+      address: address,
+      state: state,
+      pin: pin,
+      district: district,
+      profilePic: profilePic,
+      // Initialize other fields as needed
+      phoneNumber: _doctorModel?.phoneNumber ?? "",
+      uid: _doctorModel?.uid ?? "",
+      pending: _doctorModel?.pending ?? false,
+    );
+
+    notifyListeners();
+  }
+
 
 
   // storing the data locally sharepreference

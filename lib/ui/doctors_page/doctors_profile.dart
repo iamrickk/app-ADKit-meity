@@ -13,175 +13,188 @@ class DoctorProfile extends StatefulWidget {
 }
 
 class _DoctorProfileState extends State<DoctorProfile> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   @override
   Widget build(BuildContext context) {
     final ap = Provider.of<FirebaseAuthProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/background_image.png'),
-                  fit: BoxFit.cover),
-            ),
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    // const SizedBox(
-                    //   height: 20.0,
-                    // ),
-                    Stack(
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(CupertinoIcons.left_chevron),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              color: Colors.black,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    Center(
-                      child: Text(
-                        ap.doctorModel.firstname +
+        body: RefreshIndicator(
+          onRefresh: () async {
+            // Implement your refresh logic here
+            // This function will be called when the user pulls down to refresh
+            // You can fetch updated data or perform any other refresh operation
+            // For now, I'm just adding a delay to simulate a refresh
+            await Future.delayed(const Duration(seconds: 1));
+            // Add your refresh logic here
+            // For example, you can call getData() or any method to update the content
+            setState(() {});
+          },
+          child: SingleChildScrollView(
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/background_image.png'),
+                    fit: BoxFit.cover),
+              ),
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      // const SizedBox(
+                      //   height: 20.0,
+                      // ),
+                      Stack(
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(CupertinoIcons.left_chevron),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                color: Colors.black,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      Center(
+                        child: Text(
+                          ap.doctorModel.firstname +
+                              " " +
+                              ap.doctorModel.secondname,
+                          style: GoogleFonts.lato(
+                            textStyle: Theme.of(context).textTheme.displayLarge,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                            color: Colors.white,
+                            letterSpacing: 2.0,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.02,
+                      ),
+                      // placing the image and beside the change wala option
+                      Stack(
+                        children: [
+                          SizedBox(
+                            width: 140,
+                            height: 140,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(80),
+                                child: Image(
+                                    image:
+                                        NetworkImage(ap.doctorModel.profilePic),
+                                    fit: BoxFit.cover)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+
+                      /// -- BUTTON
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DoctorsPageEdit()));
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              side: BorderSide.none,
+                              shape: const StadiumBorder()),
+                          child: const Text('Edit Profile',
+                              style: TextStyle(color: Colors.black)),
+                        ),
+                      ),
+                      // Menu item that will show details
+                      // such as Name
+                      // Phone Number
+                      // Email
+                      // Speciality
+                      // Location Details
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      ProfileMenuWidget(
+                        title: ap.doctorModel.firstname +
                             " " +
                             ap.doctorModel.secondname,
-                        style: GoogleFonts.lato(
-                          textStyle: Theme.of(context).textTheme.displayLarge,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w700,
-                          fontStyle: FontStyle.normal,
-                          color: Colors.white,
-                          letterSpacing: 2.0,
-                        ),
+                        icon: CupertinoIcons.profile_circled,
                       ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
-                    ),
-                    // placing the image and beside the change wala option
-                    Stack(
-                      children: [
-                        SizedBox(
-                          width: 140,
-                          height: 140,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(80),
-                              child: Image(
-                                  image:
-                                      NetworkImage(ap.doctorModel.profilePic),
-                                  fit: BoxFit.cover)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-
-                    /// -- BUTTON
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const DoctorsPageEdit(
-                                      
-                                      )));
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            side: BorderSide.none,
-                            shape: const StadiumBorder()),
-                        child: const Text('Edit Profile',
-                            style: TextStyle(color: Colors.black)),
+                      const Divider(
+                        thickness: 2.0,
                       ),
-                    ),
-                    // Menu item that will show details
-                    // such as Name
-                    // Phone Number
-                    // Email
-                    // Speciality
-                    // Location Details
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    ProfileMenuWidget(
-                      title: ap.doctorModel.firstname +
-                          " " +
-                          ap.doctorModel.secondname,
-                      icon: CupertinoIcons.profile_circled,
-                    ),
-                    const Divider(
-                      thickness: 2.0,
-                    ),
-                    // const SizedBox(
-                    //   height: 10.0,
-                    // ),
-                    ProfileMenuWidget(
-                      title: ap.doctorModel.phoneNumber,
-                      icon: CupertinoIcons.phone,
-                    ),
-                    const Divider(
-                      thickness: 2.0,
-                    ),
-                    // const SizedBox(
-                    //   height: 10.0,
-                    // ),
-                    ProfileMenuWidget(
-                      title: ap.doctorModel.email,
-                      icon: CupertinoIcons.mail,
-                    ),
-                    const Divider(
-                      thickness: 2.0,
-                    ),
-                    // const SizedBox(
-                    //   height: 10.0,
-                    // ),
-                    ProfileMenuWidget(
-                      title: ap.doctorModel.speciality,
-                      icon: const IconData(0xf533, fontFamily: 'MaterialIcons'),
-                    ),
-                    const Divider(
-                      thickness: 2.0,
-                    ),
-                    // const SizedBox(
-                    //   height: 10.0,
-                    // ),
-                    ProfileMenuWidget(
-                      title: ap.doctorModel.address,
-                      icon: CupertinoIcons.home,
-                    ),
-                    const Divider(
-                      thickness: 2.0,
-                    ),
-                    ProfileMenuWidget(
-                      title: ap.doctorModel.state,
-                      icon: CupertinoIcons.location_solid,
-                    ),
-                    const Divider(
-                      thickness: 2.0,
-                    ),
-                    ProfileMenuWidget(
-                      title: ap.doctorModel.pin,
-                      icon: CupertinoIcons.pin,
-                    ),
-                    const Divider(
-                      thickness: 2.0,
-                    ),
-                    ProfileMenuWidget(
-                      title: ap.doctorModel.district,
-                      icon: CupertinoIcons.home,
-                    ),
-                  ],
-                ),
-              ],
+                      // const SizedBox(
+                      //   height: 10.0,
+                      // ),
+                      ProfileMenuWidget(
+                        title: ap.doctorModel.phoneNumber,
+                        icon: CupertinoIcons.phone,
+                      ),
+                      const Divider(
+                        thickness: 2.0,
+                      ),
+                      // const SizedBox(
+                      //   height: 10.0,
+                      // ),
+                      ProfileMenuWidget(
+                        title: ap.doctorModel.email,
+                        icon: CupertinoIcons.mail,
+                      ),
+                      const Divider(
+                        thickness: 2.0,
+                      ),
+                      // const SizedBox(
+                      //   height: 10.0,
+                      // ),
+                      ProfileMenuWidget(
+                        title: ap.doctorModel.speciality,
+                        icon:
+                            const IconData(0xf533, fontFamily: 'MaterialIcons'),
+                      ),
+                      const Divider(
+                        thickness: 2.0,
+                      ),
+                      // const SizedBox(
+                      //   height: 10.0,
+                      // ),
+                      ProfileMenuWidget(
+                        title: ap.doctorModel.address,
+                        icon: CupertinoIcons.home,
+                      ),
+                      const Divider(
+                        thickness: 2.0,
+                      ),
+                      ProfileMenuWidget(
+                        title: ap.doctorModel.state,
+                        icon: CupertinoIcons.location_solid,
+                      ),
+                      const Divider(
+                        thickness: 2.0,
+                      ),
+                      ProfileMenuWidget(
+                        title: ap.doctorModel.pin,
+                        icon: CupertinoIcons.pin,
+                      ),
+                      const Divider(
+                        thickness: 2.0,
+                      ),
+                      ProfileMenuWidget(
+                        title: ap.doctorModel.district,
+                        icon: CupertinoIcons.home,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

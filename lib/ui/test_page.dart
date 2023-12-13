@@ -85,7 +85,7 @@ class _TestPageState extends State<TestPage> {
   List<int> value = [0];
   var values;
   var values1;
-
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
@@ -98,6 +98,32 @@ class _TestPageState extends State<TestPage> {
     docId = ap.doctorModel.uid;
     docData = fetchUsers();
     docData1 = fetchUsers1();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // At the bottom of the list, trigger the refresh
+        _refreshPage();
+      }
+    });
+  }
+
+  Future<void> _refreshPage() async {
+    // Fetch updated data from the network or perform any refreshing logic
+    setState(() {
+      docData = fetchUsers();
+      docData1 = fetchUsers1();
+    });
+
+    // If you want to show a success message, you can use a SnackBar
+    ShapeBorder customShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16.0),
+    );
+
+    SnackBar(
+      content: Text('Page refreshed successfully!'),
+      duration: Duration(seconds: 2),
+      shape: customShape,
+    );
   }
 
   @override
@@ -108,53 +134,49 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
-    // print(ap.doctorModel.uid);
     return Scaffold(
-      backgroundColor:
-          Colors.blue[900], // Background color of the entire screen
-      body: Column(
-        children: [
-          // Manual App Bar
-          Container(
-            color: Colors.blue[900],
-            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-            child: Row(
-              children: [
-                const SizedBox(width: 15.0),
-                Text(
-                  "Hi, ${ap.doctorModel.firstname}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const Spacer(),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DoctorProfile(),
-                      ),
-                    );
-                  },
-                  child: CircleAvatar(
-                    radius: 15.0,
-                    backgroundImage: NetworkImage(
-                      ap.doctorModel.profilePic,
+      backgroundColor: Colors.blue[900],
+      body: RefreshIndicator(
+        onRefresh: _refreshPage,
+        child: Column(
+          children: [
+            Container(
+              color: Colors.blue[900],
+              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+              child: Row(
+                children: [
+                  const SizedBox(width: 15.0),
+                  Text(
+                    "Hi, ${ap.doctorModel.firstname}",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    // Add your image asset path here
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.notifications),
-                  color: Colors.white,
-                  onPressed: () {
-                    // Add your notifications button functionality here
-                  },
-                ),
-                IconButton(
+                  const Spacer(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DoctorProfile(),
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 15.0,
+                      backgroundImage: NetworkImage(
+                        ap.doctorModel.profilePic,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.notifications),
+                    color: Colors.white,
+                    onPressed: () {},
+                  ),
+                  IconButton(
                     onPressed: () {
                       ap.userSignOut().then((value) {
                         Navigator.pushAndRemoveUntil(
@@ -166,219 +188,176 @@ class _TestPageState extends State<TestPage> {
                       });
                     },
                     color: Colors.white,
-                    icon: const Icon(CupertinoIcons.arrow_right_square)),
-                FutureBuilder<List<QueryDocumentSnapshot?>>(
-                  future: docData,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      // Display a loading indicator while fetching data
-                      return const CircularProgressIndicator(); // You can replace this with your own loading widget
-                    } else if (snapshot.hasError) {
-                      // Display an error message if there's an error
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      // Display the length of the fetched users
-                      values1 = snapshot.data?.length ?? 0;
-                      value.add(values1);
-                      return Container();
-                    }
-                  },
-                ),
-                FutureBuilder<List<QueryDocumentSnapshot?>>(
-                  future: docData1,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      // Display a loading indicator while fetching data
-                      return const CircularProgressIndicator(); // You can replace this with your own loading widget
-                    } else if (snapshot.hasError) {
-                      // Display an error message if there's an error
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      // Display the length of the fetched users
-                      values = snapshot.data?.length ?? 0;
-                      value.add(values);
-                      return Container();
-                    }
-                  },
-                ),
-              ],
+                    icon: const Icon(CupertinoIcons.arrow_right_square),
+                  ),
+                  FutureBuilder<List<QueryDocumentSnapshot?>>(
+                    future: docData,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        values1 = snapshot.data?.length ?? 0;
+                        value.add(values1);
+                        return Container();
+                      }
+                    },
+                  ),
+                  FutureBuilder<List<QueryDocumentSnapshot?>>(
+                    future: docData1,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        values = snapshot.data?.length ?? 0;
+                        value.add(values);
+                        return Container();
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          // Blue Background Slider
-          Container(
-            color: Colors.blue[900], // Adjust color as needed
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: Stack(
-              children: [
-                PageView.builder(
-                  controller: _pageController,
-                  itemCount: 3, // Number of slides
-                  itemBuilder: (BuildContext context, int index) {
-                    // You can customize each slide here
-                    var cat = categoryData[index];
-                    // print(cat);
-                    // print(cat["tabDesc"]);
-                    // print(index);
-                    return Card(
-                      elevation: 5, // Adjust for elevation
-                      margin: const EdgeInsets.all(16.0),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20.0),
-                          bottom: Radius.circular(20.0),
-                        ),
-                      ),
-                      child: Center(
-                        child: SlideTab(
-                          titleGrp: titleGrp,
-                          descGrp: descGrp,
-                          imgPath: cat["imgPath"],
-                          imgBottom: cat["imgBottom"],
-                          imgHeight: cat["imgHeight"],
-                          imgLeft: cat["imgLeft"],
-                          tabDesc: cat["tabDesc"],
-                          tabName: cat["tabName"],
-                          color: cat["color"],
-                          numbers: value[index],
-                          pageno: index,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                // Dot Indicator
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 16,
-                  child: _buildDotIndicator(),
-                ),
-              ],
-            ),
-          ),
-          // White Elevated Container (70% of the screen height)
-          Expanded(
-            child: Card(
-              margin: EdgeInsets.zero, // Remove any default card margin
-              color: Colors.white,
-              elevation: 10, // Adjust for elevation
-
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20.0),
+            Container(
+              color: Colors.blue[900],
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  // Add your refresh logic here
+                  // For example, you might fetch new data and update the UI
+                  setState(() {
+                    // Update your data or perform any other necessary actions
+                    // ...
+                    print(values);
+                  });
+                },
+                child: Stack(
+                  children: [
+                    PageView.builder(
+                      controller: _pageController,
+                      itemCount: 3,
+                      itemBuilder: (BuildContext context, int index) {
+                        var cat = categoryData[index];
+                        return Card(
+                          elevation: 5,
+                          margin: const EdgeInsets.all(16.0),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20.0),
+                              bottom: Radius.circular(20.0),
+                            ),
+                          ),
+                          child: Center(
+                            child: SlideTab(
+                              titleGrp: titleGrp,
+                              descGrp: descGrp,
+                              imgPath: cat["imgPath"],
+                              imgBottom: cat["imgBottom"],
+                              imgHeight: cat["imgHeight"],
+                              imgLeft: cat["imgLeft"],
+                              tabDesc: cat["tabDesc"],
+                              tabName: cat["tabName"],
+                              color: cat["color"],
+                              numbers: value[index],
+                              pageno: index,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 16,
+                      child: _buildDotIndicator(),
+                    ),
+                  ],
                 ),
               ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'My Dashboard',
-                        style: GoogleFonts.lato(
-                          textStyle: Theme.of(context).textTheme.displayLarge,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w700,
-                          fontStyle: FontStyle.normal,
-                          color: Colors.blue,
-                          letterSpacing: 1.0,
+            ),
+            Expanded(
+              child: Card(
+                margin: EdgeInsets.zero,
+                color: Colors.white,
+                elevation: 10,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20.0),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'My Dashboard',
+                          style: GoogleFonts.lato(
+                            textStyle: Theme.of(context).textTheme.displayLarge,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                            color: Colors.blue,
+                            letterSpacing: 1.0,
+                          ),
                         ),
                       ),
-                    ),
-                    // Your Content Goes Here
-                    ListItem(
-                      title: 'Accepted Request',
-                      content:
-                          'Here you will get all the patients that you have accepted.',
-                      actionButtonText: 'View Request',
-                      actionButton: () {
-                        Navigator.push(
+                      ListItem(
+                        title: 'Accepted Request',
+                        content:
+                            'Here you will get all the patients that you have accepted.',
+                        actionButtonText: 'View Request',
+                        actionButton: () {
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => DoctorDashboard(
                                 doctorId: ap.doctorModel.uid,
                               ),
-                            ));
-                      },
-                    ),
-                    ListItem(
-                      title: 'Pending Request',
-                      content:
-                          'Here you will get all the request that patients have sent you.',
-                      actionButtonText: 'View Request',
-                      actionButton: () {
-                        Navigator.push(
+                            ),
+                          );
+                        },
+                      ),
+                      ListItem(
+                        title: 'Pending Request',
+                        content:
+                            'Here you will get all the request that patients have sent you.',
+                        actionButtonText: 'View Request',
+                        actionButton: () {
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => RequestPage(
                                 doctorId: ap.doctorModel.uid,
                               ),
-                            ));
-                      },
-                    ),
-                    ListItem(
-                      title: 'Search Patient',
-                      content:
-                          'Having Problem finding the patient? Search the patient by their phone number.',
-                      actionButtonText: 'Search',
-                      actionButton: () {
-                        Navigator.push(
+                            ),
+                          );
+                        },
+                      ),
+                      ListItem(
+                        title: 'Search Patient',
+                        content:
+                            'Having Problem finding the patient? Search the patient by their phone number.',
+                        actionButtonText: 'Search',
+                        actionButton: () {
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const doctors_portal(),
-                            ));
-                      },
-                    ),
-                    // Three Options for Product-Level Design
-                    // _buildProductOption(
-                    //   title: '',
-                    //   description: 'Details of the current patients.',
-                    //   imageUrl: 'assets/test1.jpg',
-                    //   onPressed: () {
-                    //     // Add functionality to navigate to Product 1 page
-                    //     Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: (context) => DoctorDashboard(
-                    //             doctorId: ap.doctorModel.uid,
-                    //           ),
-                    //         ));
-                    //   },
-                    // ),
-                    // _buildProductOption(
-                    //   title: 'Pending Request',
-                    //   description: 'The current requests of the patients.',
-                    //   imageUrl: 'assets/test3.jpg',
-                    //   onPressed: () {
-                    //     // Add functionality to navigate to Product 2 page
-                    //     Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: (context) => RequestPage(
-                    //             doctorId: ap.doctorModel.uid,
-                    //           ),
-                    //         ));
-                    //   },
-                    // ),
-                    // _buildProductOption(
-                    //   title: 'Search',
-                    //   description: 'Search the patient by phone number.',
-                    //   imageUrl: 'assets/search.jpg',
-                    //   onPressed: () {
-                    //     Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: (context) => const doctors_portal(),
-                    //         ));
-                    //     // Add functionality to navigate to Product 3 page
-                    //   },
-                    // ),
-                  ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -387,13 +366,13 @@ class _TestPageState extends State<TestPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        3, // Number of slides
+        3,
         (index) {
           return AnimatedContainer(
             duration: const Duration(milliseconds: 100),
             margin: const EdgeInsets.symmetric(horizontal: 5.0),
             height: 8.0,
-            width: _currentPage == index ? 15.0 : 7.0, // Adjusted width
+            width: _currentPage == index ? 15.0 : 7.0,
             decoration: BoxDecoration(
               color: _currentPage == index
                   ? Colors.blue
@@ -402,53 +381,6 @@ class _TestPageState extends State<TestPage> {
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildProductOption({
-    required String title,
-    required String description,
-    required String imageUrl,
-    required Function onPressed,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        onPressed();
-      },
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.18,
-        child: Card(
-          elevation: 7,
-          margin: const EdgeInsets.all(10.0),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(5.0, 20.0, 5.0, 10.0),
-            child: ListTile(
-              leading: Image.asset(
-                imageUrl,
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width *
-                    0.3, // Adjust the width as needed
-                height: MediaQuery.of(context).size.width *
-                    0.2, // Adjust the height as needed
-              ),
-              title: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: Text(
-                description,
-                style: const TextStyle(fontSize: 14.0),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

@@ -98,6 +98,28 @@ class API {
       "time": DateTime.now(),
     });
   }
+   static void saveSubQuestionResponse(String mainQuestion, String subQuestion,
+      int groupId, int selectedOption) async {
+    // Formulate a key for the subquestion using main question and group ID
+    String subQuestionKey = "$mainQuestion-$groupId";
+    print(FirebaseAuth.instance.currentUser!.uid);
+    print(API.current_profile_id);
+
+    // Save response to Firestore under users -> profiles -> results -> user_response
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("profiles")
+        .doc(API.current_profile_id)
+        .collection("results")
+        .add({
+      "main_question": mainQuestion, // Store the main question
+      "sub_question_responses": {
+        subQuestionKey: selectedOption,
+        // Add more subquestions as needed
+      },
+    });
+  }
 
   static void addChatbotResponse(double val) {
     FirebaseFirestore.instance

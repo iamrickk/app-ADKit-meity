@@ -444,7 +444,7 @@ class _HomePageState extends State<HomePage> {
                 Center(
                   child: SizedBox(
                     width: 200,
-                    height: 200, // Mediaquery.of(context).size.height 
+                    height: 200, // Mediaquery.of(context).size.height
                     child: SfRadialGauge(
                       axes: <RadialAxis>[
                         RadialAxis(
@@ -851,7 +851,8 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => const requestedDocPage()),
+                                          builder: (context) =>
+                                              const requestedDocPage()),
                                     );
                                   },
                                   child: Card(
@@ -1060,8 +1061,8 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const Text(
-                                  "Requested Doctors",
+                                Text(
+                                  AppLocalizations.of(context)!.requestDoctor,
                                   textAlign: TextAlign.center,
                                 ),
                               ],
@@ -1072,7 +1073,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                             ],
+              ],
             ),
           ),
         ),

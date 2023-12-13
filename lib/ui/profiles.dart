@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,7 @@ class _ProfilesState extends State<Profiles> {
 
   //     list.forEach((element) {
   //       print(element.id);
-  //     });
+  //     });  
   //   });
   // }
 
@@ -53,10 +52,10 @@ class _ProfilesState extends State<Profiles> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Text(
             AppLocalizations.of(context)!.profiles,
-            style: TextStyle(
+            style: const TextStyle(
               // color: Color(0xFFBF828A),
               fontSize: 28.0,
               fontWeight: FontWeight.w900,
@@ -116,15 +115,18 @@ class _ProfilesState extends State<Profiles> {
                                         children: [
                                           Text(
                                             "${list[index]['first_name']} ${list[index]['second_name']}",
-                                            style: TextStyle(fontSize: 16),
+                                            style:
+                                                const TextStyle(fontSize: 16),
                                           ),
                                           Text(
                                             "${AppLocalizations.of(context)!.gender}: ${getGender(list[index]['gender'])}",
-                                            style: TextStyle(fontSize: 16),
+                                            style:
+                                                const TextStyle(fontSize: 16),
                                           ),
                                           Text(
                                             "${AppLocalizations.of(context)!.dob}: ${list[index]['dob']}",
-                                            style: TextStyle(fontSize: 16),
+                                            style:
+                                                const TextStyle(fontSize: 16),
                                           ),
                                         ]),
                                     IconButton(
@@ -180,7 +182,7 @@ class _ProfilesState extends State<Profiles> {
                                                     AppLocalizations.of(
                                                             context)!
                                                         .no,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       color: Colors.white,
                                                     ),
                                                   ),
@@ -235,7 +237,7 @@ class _ProfilesState extends State<Profiles> {
           child: getProfileView(),
         ),
         Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: ElevatedButton(
             style: ButtonStyle(
               shape: MaterialStateProperty.all(

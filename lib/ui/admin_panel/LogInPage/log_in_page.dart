@@ -17,7 +17,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   final idController = TextEditingController();
   final passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool isFull = false;
 
   void loginUser() async {
@@ -26,33 +26,22 @@ class _AdminHomePageState extends State<AdminHomePage> {
       String password = passwordController.text.trim();
 
       if (id.isNotEmpty && password.isNotEmpty) {
-        // Check if an admin with the entered credentials exists in the Firestore collection
-        QuerySnapshot adminSnapshot = await _firestore
-            .collection('admin')
-            .where('username', isEqualTo: id)
-            .where('password', isEqualTo: password)
-            .get();
+        // Sign in with email and password
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: id,
+          password: password,
+        );
 
-        print(adminSnapshot.docs);
-        if (adminSnapshot.docs.isNotEmpty) {
-          // Admin with the entered credentials found
-          UserCredential userCredential = await _auth
-              .signInWithEmailAndPassword(email: id, password: password);
-
-          // Check if the user is an admin (you may have a specific admin role in your Firestore)
-          // For simplicity, this example assumes that all users are admins
-          if (userCredential.user != null) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const NavbarPage()),
-            );
-          } else {
-            // Handle the case where the user is not an admin
-            ScaffoldMessenger.of(context)
-                .showSnackBar(MySnackBars.failureSnackBar);
-          }
+        // Check if the user is successfully authenticated
+        print(userCredential.user);
+        if (userCredential.user != null) {
+          // Navigate to the next screen or perform additional actions
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const NavbarPage()),
+          );
         } else {
-          // Admin with the entered credentials not found
+          // Handle the case where authentication failed
           ScaffoldMessenger.of(context)
               .showSnackBar(MySnackBars.failureSnackBar);
         }

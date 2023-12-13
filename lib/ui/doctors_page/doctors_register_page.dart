@@ -77,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           //   height: MediaQuery.of(context).size.height * 0.2,
                           // ),
                           Container(
-                            height: MediaQuery.of(context).size.height * 0.15,
+                            height: MediaQuery.of(context).size.height * 0.25,
                             margin: const EdgeInsets.all(20.0),
                             child: DefaultTextStyle(
                               style: GoogleFonts.lato(
@@ -88,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 color: Colors.white,
                               ),
                               child: const Text(
-                                "Welcome \n Back!",
+                                "Welcome \n To \n Adkit!",
                               ),
                             ),
                           ),
