@@ -24,6 +24,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseApi().initNotifications();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => LanguageModel()),

@@ -28,7 +28,7 @@
     "@showTrend": {
         "description": "Message to show trend graph"
     },
-    "showDoctors": "Show nearby Doctors",
+    "showDoctors": "Show nearby Doctors in app",
     "@showDoctors": {
         "description": "Message to show nearby doctors"
     },
@@ -208,9 +208,9 @@
     "@adviceSafe": {
         "description": "advice"
     },
-    "showHospitals": "Show nearby Doctors",
+    "showHospitals": "Show nearby Doctors in GMap",
     "@showHospitals": {
-        "description": "Message to show nearby Hospitals"
+        "description": "Message to show nearby Doctors"
     },
     "nearbyHospitals": "Nearby Hospitals",
     "@nearbyHospitals": {

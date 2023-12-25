@@ -20,15 +20,6 @@ class _DashboardPageState extends State<DashboardPage> {
   static AutoSizeGroup descGrp = AutoSizeGroup();
   static List<Map<String, dynamic>> categoryData = [
     {
-      "imgLeft": 5.0,
-      "imgBottom": 19.0,
-      "imgHeight": 122.0,
-      "imgPath": "assets/pending.png",
-      "tabName": "Total Verified",
-      "tabDesc": "Total Count of Verified Doctors",
-      "color": Colors.deepPurpleAccent,
-    },
-    {
       "imgLeft": 15.0,
       "imgBottom": -8.0,
       "imgHeight": 150.0,
@@ -36,6 +27,15 @@ class _DashboardPageState extends State<DashboardPage> {
       "tabName": "Total Pending Request",
       "tabDesc": "Total Count of Pending Doctors",
       "color": Colors.teal[800],
+    },
+    {
+      "imgLeft": 5.0,
+      "imgBottom": 19.0,
+      "imgHeight": 122.0,
+      "imgPath": "assets/pending.png",
+      "tabName": "Total Verified",
+      "tabDesc": "Total Count of Verified Doctors",
+      "color": Colors.deepPurpleAccent,
     },
     {
       "imgPath": "assets/test1.jpg",

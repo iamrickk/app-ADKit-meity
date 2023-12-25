@@ -189,7 +189,7 @@ class _RequestPageState extends State<RequestPage> {
                     } else if (snapshot.hasError) {
                       return Text('Error : ${snapshot.error}');
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Text('No doctors available.');
+                      return const Text('No Patients available.');
                     } else {
                       return ListView.builder(
                         itemCount: snapshot.data!.length,

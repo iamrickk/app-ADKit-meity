@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:thefirstone/ui/user_pov_doctor/doctor_profile_view_page.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -48,7 +48,7 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
     String name = nameController.text.toLowerCase();
     String pin = pinController.text;
     String phone = phoneController.text;
-    String district = districtController.text;
+    String district = districtController.text.toLowerCase();
     print("Hello");
     print(pinController.text);
 
@@ -140,7 +140,7 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                       controller: nameController,
                       onChanged: (value) => filterDoctors(),
                       decoration: const InputDecoration(
-                        labelText: 'Search by name',
+                        labelText: 'Search by Name',
                         prefixIcon: Icon(Icons.person),
                         border: InputBorder.none,
                         contentPadding:
@@ -158,7 +158,7 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                       controller: pinController,
                       onChanged: (value) => filterDoctors(),
                       decoration: const InputDecoration(
-                        labelText: 'Search by pincode',
+                        labelText: 'Search by Pincode',
                         prefixIcon: Icon(Icons.password),
                         border: InputBorder.none,
                         contentPadding:
@@ -176,7 +176,7 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                       controller: phoneController,
                       onChanged: (value) => filterDoctors(),
                       decoration: const InputDecoration(
-                        labelText: 'Search by phone',
+                        labelText: 'Search by Phone',
                         prefixIcon: Icon(Icons.phone),
                         border: InputBorder.none,
                         contentPadding:
@@ -194,7 +194,7 @@ class _VerifiedDocPageState extends State<VerifiedDocPage> {
                       controller: districtController,
                       onChanged: (value) => filterDoctors(),
                       decoration: const InputDecoration(
-                        labelText: 'Search by district',
+                        labelText: 'Search by City',
                         prefixIcon: Icon(Icons.location_city),
                         border: InputBorder.none,
                         contentPadding:

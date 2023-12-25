@@ -705,31 +705,31 @@ class _HomePageState extends State<HomePage> {
                           alignment: Alignment.topLeft,
                           padding: const EdgeInsets.symmetric(vertical: 25),
                         ),
-                        Container(
-                          // margin: EdgeInsets.all(20),
-                          child: Card(
-                            elevation: 10,
-                            color: Theme.of(context).colorScheme.secondary,
-                            child: IconButton(
-                              onPressed: () async {
-                                await FirebaseAuth.instance.signOut();
-                                await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LanguageSelect()));
-                                setState(() {
-                                  firstButtonText = null;
-                                  secondButtonText = null;
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.language,
-                                color: Color(0xFFBF828A), //Color(0xFFBF828A),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Container(
+                        //   // margin: EdgeInsets.all(20),
+                        //   child: Card(
+                        //     elevation: 10,
+                        //     color: Theme.of(context).colorScheme.secondary,
+                        //     child: IconButton(
+                        //       onPressed: () async {
+                        //         await FirebaseAuth.instance.signOut();
+                        //         await Navigator.push(
+                        //             context,
+                        //             MaterialPageRoute(
+                        //                 builder: (context) =>
+                        //                     const LanguageSelect()));
+                        //         setState(() {
+                        //           firstButtonText = null;
+                        //           secondButtonText = null;
+                        //         });
+                        //       },
+                        //       icon: const Icon(
+                        //         Icons.language,
+                        //         color: Color(0xFFBF828A), //Color(0xFFBF828A),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         Container(
                           // margin: EdgeInsets.all(20),
                           child: Card(
@@ -852,7 +852,8 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => const TrendGraph()),
+                                          builder: (context) =>
+                                              const TrendGraph()),
                                     );
                                   },
                                   child: Card(

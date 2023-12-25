@@ -23,6 +23,7 @@ class _PalmScorePlotterState extends State<PalmScorePlotter> {
   late List<DateTime> sortedDates;
   double sliderValue = 0;
   double currentHbVal = 0.0;
+  final String message = 'Slide the slidebar to get the recent test values!';
 
   @override
   void initState() {
@@ -97,11 +98,78 @@ class _PalmScorePlotterState extends State<PalmScorePlotter> {
                         color: Colors.black,
                       ),
                     ),
+                    IconButton(
+                      icon:
+                          const Icon(Icons.info_outline), // Use a relevant icon
+                      color: Colors.blue, // Adjust color to your theme
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(16.0), // Round corners
+                          ),
+                          backgroundColor: Colors.white, // Background color
+                          elevation: 10.0, // Shadow effect
+                          builder: (context) => Padding(
+                            padding: const EdgeInsets.all(20.0), // Spacing
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Message', // Title
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6, // Adjust font style
+                                ),
+                                const SizedBox(
+                                    height: 10.0), // Spacing between elements
+                                Text(
+                                  message, // Message content
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1, // Adjust font style
+                                ),
+                                const SizedBox(
+                                    height: 20.0), // Spacing between elements
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(
+                                          context), // Cancel button
+                                      child: const Text(
+                                        'Cancel',
+                                        style: TextStyle(
+                                          color: Colors.grey, // Neutral color
+                                        ),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // Implement your confirm action
+                                        Navigator.pop(
+                                            context); // Dismiss the sheet
+                                      },
+                                      child: const Text(
+                                        'Confirm/Proceed',
+                                        style: TextStyle(
+                                          color: Colors.blue, // Primary color
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                     SizedBox(
                       height: 80,
                       child: Column(
                         children: [
-                          
                           // Expanded(
                           //   child: SizedBox(
                           //     height: 50,

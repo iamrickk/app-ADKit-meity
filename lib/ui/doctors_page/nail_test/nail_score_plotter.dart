@@ -346,6 +346,7 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
   double sliderValue = 0;
   double currentHbVal = 0.0;
   bool showAvg = false;
+  final String message = 'Slide the slidebar to get the recent test values!';
 
   @override
   void initState() {
@@ -375,7 +376,7 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
   List<DateTime> getSortedDates(List<QueryDocumentSnapshot?> snapshotData) {
     List<DateTime> dates = snapshotData
         .map((doc) => DateTime.fromMillisecondsSinceEpoch(
-        (doc!['time'] as Timestamp?)?.millisecondsSinceEpoch ?? 0))
+            (doc!['time'] as Timestamp?)?.millisecondsSinceEpoch ?? 0))
         .toList();
     dates.sort((a, b) => b.compareTo(a)); // Sort in descending order
     return dates;
@@ -392,7 +393,7 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: Colors.blue,
             ),
           ),
         ),
@@ -419,6 +420,75 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
                         color: Colors.black,
                       ),
                     ),
+                    IconButton(
+                      icon:
+                          const Icon(Icons.info_outline), // Use a relevant icon
+                      color: Colors.blue, // Adjust color to your theme
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(16.0), // Round corners
+                          ),
+                          backgroundColor: Colors.white, // Background color
+                          elevation: 10.0, // Shadow effect
+                          builder: (context) => Padding(
+                            padding: const EdgeInsets.all(20.0), // Spacing
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Message', // Title
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6, // Adjust font style
+                                ),
+                                const SizedBox(
+                                    height: 10.0), // Spacing between elements
+                                Text(
+                                  message, // Message content
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1, // Adjust font style
+                                ),
+                                const SizedBox(
+                                    height: 20.0), // Spacing between elements
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(
+                                          context), // Cancel button
+                                      child: const Text(
+                                        'Cancel',
+                                        style: TextStyle(
+                                          color: Colors.blue, // Neutral color
+                                          
+                                        ),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // Implement your confirm action
+                                        Navigator.pop(
+                                            context); // Dismiss the sheet
+                                      },
+                                      child: const Text(
+                                        'Confirm/Proceed',
+                                        style: TextStyle(
+                                          color: Colors.black, // Primary color
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                     const Padding(
                       padding: EdgeInsets.all(22.0),
                     ),
@@ -436,7 +506,7 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
                                   final index = value.toInt();
                                   final hbVal =
                                       (snapshot.data![index]!['hb_val']
-                                      as double?) ??
+                                              as double?) ??
                                           0.0;
                                   currentHbVal = hbVal;
                                 }
@@ -503,7 +573,9 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
                               'avg',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: showAvg ? Colors.black.withOpacity(0.5) : Colors.black,
+                                color: showAvg
+                                    ? Colors.black.withOpacity(0.5)
+                                    : Colors.black,
                               ),
                             ),
                           ),
@@ -739,4 +811,3 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
     );
   }
 }
-
