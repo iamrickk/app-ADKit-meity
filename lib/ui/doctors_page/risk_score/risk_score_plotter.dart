@@ -4,19 +4,19 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-class RiskScorePlooter extends StatefulWidget {
+class RiskScorePlotter extends StatefulWidget {
   final String userId;
   final String profileId;
 
-  const RiskScorePlooter(
+  const RiskScorePlotter(
       {Key? key, required this.userId, required this.profileId})
       : super(key: key);
 
   @override
-  State<RiskScorePlooter> createState() => _RiskScorePlooterState();
+  State<RiskScorePlotter> createState() => _RiskScorePlotterState();
 }
 
-class _RiskScorePlooterState extends State<RiskScorePlooter> {
+class _RiskScorePlotterState extends State<RiskScorePlotter> {
   late Future<List<QueryDocumentSnapshot?>> values;
 
   List<FlSpot> riskScoreData = [];

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,12 +20,23 @@ class PalmScorePlotter extends StatefulWidget {
 }
 
 class _PalmScorePlotterState extends State<PalmScorePlotter> {
+  List<FlSpot> palmScoreData = [];
+  List<Color> gradientColors = [
+    Colors.cyan,
+    Colors.blueAccent,
+  ];
+
   late Future<List<QueryDocumentSnapshot?>> values;
   late int showingTooltipSpot;
   late List<DateTime> sortedDates;
   double sliderValue = 0;
   double currentHbVal = 0.0;
-  final String message = 'Slide the slidebar to get the recent test values!';
+  double avg = 0.0;
+  double arrlen = 0.0;
+  double maxScore = 0.0;
+  bool showAvg = false;
+  final String message = 'Slide the slidebar to get the recent test values!\n\nClick on the graph plot to know the values!';
+
 
   @override
   void initState() {
@@ -59,8 +72,39 @@ class _PalmScorePlotterState extends State<PalmScorePlotter> {
     return dates;
   }
 
+  void updatePalmScoreData() {
+    palmScoreData = [];
+    final lastFiveItems = values.then((snapshot) {
+      return snapshot.take(5);
+    });
+    var ind = 0.0;
+    var sum = 0.0;
+    var maxResultPalmScore = 0.0;
+    lastFiveItems.then((data) {
+      for (final documentSnapshot in data) {
+        if (documentSnapshot != null && documentSnapshot.data() != null) {
+          final data = documentSnapshot!.data() as Map<String, dynamic>?;
+          final double? nailScore = data!['hb_val'] as double?;
+          final testDate = DateTime.fromMillisecondsSinceEpoch(
+              (data['time'] as Timestamp?)?.millisecondsSinceEpoch ?? 0);
+          final formattedDate = DateFormat.yMd().format(testDate);
+          String resultNailString = nailScore!.toStringAsFixed(2);
+          double resultNailScore = double.parse(resultNailString);
+          sum += resultNailScore;
+          maxResultPalmScore = max(maxResultPalmScore, resultNailScore);
+          palmScoreData.add(FlSpot(ind++, resultNailScore));
+        }
+      }
+      print(palmScoreData);
+      maxScore = maxResultPalmScore;
+      arrlen = palmScoreData.length*1.0;
+      if(palmScoreData.isNotEmpty) avg = sum/palmScoreData.length;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    updatePalmScoreData();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -70,7 +114,7 @@ class _PalmScorePlotterState extends State<PalmScorePlotter> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ),
@@ -166,6 +210,9 @@ class _PalmScorePlotterState extends State<PalmScorePlotter> {
                         );
                       },
                     ),
+                    const Padding(
+                      padding: EdgeInsets.all(22.0),
+                    ),
                     SizedBox(
                       height: 80,
                       child: Column(
@@ -233,151 +280,53 @@ class _PalmScorePlotterState extends State<PalmScorePlotter> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.1,
                     ),
-                    AspectRatio(
-                      aspectRatio: 2,
-                      child: LineChart(
-                        LineChartData(
-                          lineBarsData: [
-                            LineChartBarData(
-                              spots:
-                                  List.generate(snapshot.data!.length, (index) {
-                                final doc = snapshot.data![index];
-                                final date =
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                  (doc!['time'] as Timestamp?)
-                                          ?.millisecondsSinceEpoch ??
-                                      0,
-                                );
-                                final xValue = sortedDates
-                                        .indexOf(date)
-                                        .toDouble() +
-                                    index *
-                                        0.1; // Add a small offset to x to avoid overlapping points
-                                final yValue =
-                                    (doc['hb_val'] as double?) ?? 0.0;
-                                return FlSpot(xValue, yValue);
-                              }),
-                              isCurved: false,
-                              dotData: const FlDotData(show: false),
-                              color: Colors.red,
+                    const Text(
+                      "Graph Plot",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(15.0),
+                    ),
+                    Stack(
+                      children: <Widget>[
+                        AspectRatio(
+                          aspectRatio: 1.30,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              right: 8,
+                              left: 43,
+                              top: 5,
+                              bottom: 12,
                             ),
-                          ],
-                          borderData: FlBorderData(
-                              border: const Border(
-                                  bottom: BorderSide(), left: BorderSide())),
-                          gridData: const FlGridData(show: false),
-                          titlesData: const FlTitlesData(
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: true),
-                              axisNameSize: 20.0,
-                              drawBelowEverything: false,
-                              axisNameWidget: Text(
-                                "Date",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 15.0,
-                                ),
-                              ),
+                            child: LineChart(
+                              showAvg ? avgData() : mainData(),
                             ),
-                            leftTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                              axisNameWidget: Text(
-                                "Hb Value",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 15.0,
-                                ),
-                              ),
-                            ),
-                            topTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)),
-                            rightTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)),
-                          ),
-                          showingTooltipIndicators: showingTooltipSpot != -1
-                              ? [
-                                  ShowingTooltipIndicators([
-                                    LineBarSpot(
-                                      LineChartBarData(
-                                        spots: List.generate(
-                                            snapshot.data!.length, (index) {
-                                          final doc = snapshot.data![index];
-                                          final date = DateTime
-                                              .fromMillisecondsSinceEpoch(
-                                            (doc!['time'] as Timestamp?)
-                                                    ?.millisecondsSinceEpoch ??
-                                                0,
-                                          );
-                                          final xValue = sortedDates
-                                                  .indexOf(date)
-                                                  .toDouble() +
-                                              index *
-                                                  0.1; // Add a small offset to x to avoid overlapping points
-                                          final yValue =
-                                              (doc['hb_val'] as double?) ?? 0.0;
-                                          return FlSpot(xValue, yValue);
-                                        }),
-                                        isCurved: false,
-                                        dotData: const FlDotData(show: false),
-                                        color: Colors.red,
-                                      ),
-                                      showingTooltipSpot,
-                                      FlSpot(
-                                        showingTooltipSpot.toDouble(),
-                                        (snapshot.data![showingTooltipSpot]![
-                                                'hb_val'] as double?) ??
-                                            0.0,
-                                      ),
-                                    ),
-                                  ])
-                                ]
-                              : [],
-                          lineTouchData: LineTouchData(
-                            enabled: true,
-                            touchTooltipData: LineTouchTooltipData(
-                              tooltipBgColor: Colors.blue,
-                              tooltipRoundedRadius: 20.0,
-                              fitInsideHorizontally: true,
-                              tooltipMargin: 0,
-                              getTooltipItems: (touchedSpots) {
-                                return touchedSpots.map(
-                                  (LineBarSpot touchedSpot) {
-                                    const textStyle = TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black,
-                                    );
-                                    return LineTooltipItem(
-                                      snapshot.data![touchedSpot.spotIndex]![
-                                              'hb_val']
-                                          .toStringAsFixed(2),
-                                      textStyle,
-                                    );
-                                  },
-                                ).toList();
-                              },
-                            ),
-                            handleBuiltInTouches: false,
-                            touchCallback: (event, response) {
-                              if (response?.lineBarSpots != null &&
-                                  event is FlTapUpEvent) {
-                                setState(() {
-                                  final spotIndex =
-                                      response?.lineBarSpots?[0].spotIndex ??
-                                          -1;
-                                  if (spotIndex == showingTooltipSpot) {
-                                    showingTooltipSpot = -1;
-                                  } else {
-                                    showingTooltipSpot = spotIndex;
-                                  }
-                                });
-                              }
-                            },
                           ),
                         ),
-                      ),
+                        Container(
+                          width: 60,
+                          height: 30,
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                showAvg = !showAvg;
+                              });
+                            },
+                            child: Text(
+                              'AVG',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: showAvg ? Colors.greenAccent : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 );
@@ -386,6 +335,198 @@ class _PalmScorePlotterState extends State<PalmScorePlotter> {
           ),
         ),
       ),
+    );
+  }
+
+  LineChartData mainData() {
+    return LineChartData(
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: true,
+        horizontalInterval: 1,
+        verticalInterval: 1,
+        getDrawingHorizontalLine: (value) {
+          return const FlLine(
+            color: Colors.black,
+            strokeWidth: 1,
+          );
+        },
+        getDrawingVerticalLine: (value) {
+          return const FlLine(
+            color: Colors.black,
+            strokeWidth: 1,
+          );
+        },
+      ),
+      titlesData: const FlTitlesData(
+        show: true,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        bottomTitles: AxisTitles(
+          axisNameWidget: Padding(
+            padding: EdgeInsets.all(1.25), // Adjust the value as needed
+            child: Text(
+              'TIME',
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        leftTitles: AxisTitles(
+          axisNameSize: 20,
+          axisNameWidget: Text(
+            'Hb VALUES',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(
+        show: true,
+        border: Border.all(color: const Color(0xff37434d)),
+      ),
+      minX: 0,
+      maxX: arrlen-1,
+      minY: maxScore*0.6,
+      maxY: maxScore*1.2,
+      lineBarsData: [
+        LineChartBarData(
+          spots: palmScoreData,
+          isCurved: false,
+          gradient: LinearGradient(
+            colors: gradientColors,
+          ),
+          barWidth: 5,
+          isStrokeCapRound: true,
+          dotData: const FlDotData(
+            show: true,
+          ),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: gradientColors
+                  .map((color) => color.withOpacity(0.3))
+                  .toList(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  LineChartData avgData() {
+    return LineChartData(
+      lineTouchData: const LineTouchData(enabled: true),
+      gridData: FlGridData(
+        show: true,
+        drawHorizontalLine: true,
+        verticalInterval: 1,
+        horizontalInterval: 1,
+        getDrawingVerticalLine: (value) {
+          return const FlLine(
+            color: Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+        getDrawingHorizontalLine: (value) {
+          return const FlLine(
+            color: Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+      ),
+      titlesData: const FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          axisNameWidget: Padding(
+            padding: EdgeInsets.all(1.5), // Adjust the value as needed
+            child: Text(
+              'TIME',
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        leftTitles: AxisTitles(
+          axisNameSize: 20,
+          axisNameWidget: Text(
+            'Hb VALUES',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      ),
+      borderData: FlBorderData(
+        show: true,
+        border: Border.all(color: const Color(0xff37434d)),
+      ),
+      minX: 0,
+      maxX: arrlen-1,
+      minY: maxScore*0.6,
+      maxY: maxScore*1.2,
+      lineBarsData: [
+        LineChartBarData(
+          spots: [
+            FlSpot(0, avg),
+            FlSpot(arrlen-1, avg),
+          ],
+          isCurved: false,
+          gradient: LinearGradient(
+            colors: [
+              ColorTween(begin: Colors.greenAccent, end: Colors.green)
+                  .lerp(0.2)!,
+              ColorTween(begin: Colors.greenAccent, end: Colors.green)
+                  .lerp(0.2)!,
+            ],
+          ),
+          barWidth: 5,
+          isStrokeCapRound: true,
+          dotData: const FlDotData(
+            show: true,
+          ),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: [
+                ColorTween(begin: Colors.greenAccent, end: Colors.green)
+                    .lerp(0.2)!
+                    .withOpacity(0.1),
+                ColorTween(begin: Colors.greenAccent, end: Colors.green)
+                    .lerp(0.2)!
+                    .withOpacity(0.1),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

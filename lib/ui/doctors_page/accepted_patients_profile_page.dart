@@ -71,7 +71,7 @@ class _AcceptPatientProfileState extends State<AcceptPatientProfile> {
   List<Widget> getPages() {
     return [
       RiskScoreAll(profileId: widget.profileId, userId: widget.userId),
-      RiskScorePlooter(profileId: widget.profileId, userId: widget.userId),
+      RiskScorePlotter(profileId: widget.profileId, userId: widget.userId),
       PalmScoreAll(profileId: widget.profileId, userId: widget.userId),
       PalmScorePlotter(profileId: widget.profileId, userId: widget.userId),
       NailScoreAll(profileId: widget.profileId, userId: widget.userId),
