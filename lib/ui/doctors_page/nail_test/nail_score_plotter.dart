@@ -346,7 +346,7 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
   double sliderValue = 0;
   double currentHbVal = 0.0;
   bool showAvg = false;
-  final String message = 'Slide the slidebar to get the recent test values!';
+  final String message = 'Slide the slidebar to get the recent test values!\n\nClick on the graph plot to know the values!';
 
   @override
   void initState() {
@@ -550,8 +550,8 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
                           aspectRatio: 1.30,
                           child: Padding(
                             padding: const EdgeInsets.only(
-                              right: 18,
-                              left: 12,
+                              right: 8,
+                              left: 43,
                               top: 5,
                               bottom: 12,
                             ),
@@ -560,22 +560,21 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        Container(
                           width: 60,
-                          height: 34,
-                          child: TextButton(
+                          height: 30,
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
                             onPressed: () {
                               setState(() {
                                 showAvg = !showAvg;
                               });
                             },
                             child: Text(
-                              'avg',
+                              'AVG',
                               style: TextStyle(
-                                fontSize: 12,
-                                color: showAvg
-                                    ? Colors.black.withOpacity(0.5)
-                                    : Colors.black,
+                                fontSize: 14,
+                                color: showAvg ? Colors.greenAccent : Colors.white,
                               ),
                             ),
                           ),
@@ -590,42 +589,6 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
         ),
       ),
     );
-  }
-
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
-    );
-    Widget text = const Text('DATE', style: style);
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: text,
-    );
-  }
-
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
-    );
-    String text;
-    switch (value.toInt()) {
-      case 1:
-        text = '40K';
-        break;
-      case 3:
-        text = '30k';
-        break;
-      case 5:
-        text = '50k';
-        break;
-      default:
-        return Container();
-    }
-
-    return Text(text, style: style, textAlign: TextAlign.left);
   }
 
   LineChartData mainData() {
@@ -648,28 +611,39 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
           );
         },
       ),
-      titlesData: FlTitlesData(
+      titlesData: const FlTitlesData(
         show: true,
-        rightTitles: const AxisTitles(
+        rightTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: const AxisTitles(
+        topTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
         bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            interval: 10,
-            getTitlesWidget: bottomTitleWidgets,
+          axisNameWidget: Padding(
+            padding: EdgeInsets.all(1.25), // Adjust the value as needed
+            child: Text(
+              'TIME',
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
         leftTitles: AxisTitles(
+          axisNameSize: 20,
+          axisNameWidget: Text(
+            'Hb VALUES',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           sideTitles: SideTitles(
-            showTitles: true,
-            interval: 13,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
+            showTitles: false,
           ),
         ),
       ),
@@ -688,8 +662,6 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
             FlSpot(2.6, 2),
             FlSpot(4.9, 5),
             FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
             FlSpot(11, 4),
           ],
           isCurved: false,
@@ -735,28 +707,39 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
           );
         },
       ),
-      titlesData: FlTitlesData(
+      titlesData: const FlTitlesData(
         show: true,
         bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            getTitlesWidget: bottomTitleWidgets,
-            interval: 1,
+          axisNameWidget: Padding(
+            padding: EdgeInsets.all(1.5), // Adjust the value as needed
+            child: Text(
+              'TIME',
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
         leftTitles: AxisTitles(
+          axisNameSize: 20,
+          axisNameWidget: Text(
+            'Hb VALUES',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
-            interval: 1,
+            showTitles: false,
           ),
         ),
-        topTitles: const AxisTitles(
+        topTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        rightTitles: const AxisTitles(
+        rightTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
       ),
@@ -771,12 +754,10 @@ class _NailScorePlotterState extends State<NailScorePlotter> {
       lineBarsData: [
         LineChartBarData(
           spots: const [
-            FlSpot(0, 3.44),
+            FlSpot(10, 3.44),
             FlSpot(2.6, 3.44),
             FlSpot(4.9, 3.44),
             FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
             FlSpot(11, 3.44),
           ],
           isCurved: false,
